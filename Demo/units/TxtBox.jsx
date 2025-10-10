@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function TxtBox({name, value = '', onChange = null, extra = {}}) {
     // init
-    const { type = "text", id = name, step, alias, validation, regex, placeholder, translation } = extra;
+    const { type = "text", id = name, alias, validation, regex, placeholder, translation } = extra;
     if(type === 'color' && value === '') {
         value = '#585d93';
     }
@@ -28,7 +28,6 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
         onChange: handleChange,
         autoComplete: 'off',
         ...(placeholder && { placeholder }),
-        ...(step && { step }),
         ...(validation && { "data-validation": validation }),
         ...(regex && { "data-regex": regex }),
         ...(translation && { "data-translation": translation }),
