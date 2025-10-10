@@ -20,10 +20,6 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
         setPasswordMode(!passwordMode);
     }
 
-    function changeColorCode(e) {
-        setValue(e.target.value);
-    }
-
     // view
     const commonProps = {
         id,
@@ -55,7 +51,7 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
                                     { 
                                         type === 'color' && 
                                         ( 
-                                            <input type="text" value={defaultValue} maxLength={7} onChange={changeColorCode}/> 
+                                            <input type="text" value={defaultValue} maxLength={7} onChange={handleChange}/> 
                                         ) 
                                     }
                                     {   
