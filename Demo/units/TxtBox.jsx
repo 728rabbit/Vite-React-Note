@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function TxtBox({ name, value = '', onChange = null, extra = {} }) {
+export default function TxtBox({name, value = '', onChange = null, extra = {}}) {
     // init
     const { type = "text", id = name, step, alias, validation, regex, placeholder, translation } = extra;
     if(type === 'color' && value === '') {
