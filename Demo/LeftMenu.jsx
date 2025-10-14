@@ -122,7 +122,7 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
                     console.error(e);
                 }
               }} target={ (item.target ?? '_self') }
-              className={([((openIndex == item.index) ? 'current': ''), ((item.child) ? 'parent': '')].join(' ').trim())}>
+              className={([((openIndex == item.index) ? 'current': ''), ((item.child) ? 'parent': '')].filter(Boolean).join(' ').trim())}>
               <FontAwesomeIcon icon={ item.icon }/><span>{ item.name }</span>
               </Link>
               { item.child && (
