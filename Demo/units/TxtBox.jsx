@@ -12,6 +12,10 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
     
     // functions
     function handleChange(e) {
+        const parentElement = e.target.closest('div.iweb-input');
+        parentElement.classList.remove('error');
+        const existingErrors = parentElement.querySelectorAll('small.tips');
+        existingErrors.forEach(err => err.remove());
         setValue(e.target.value);
         if (onChange) { onChange(e) };
     };

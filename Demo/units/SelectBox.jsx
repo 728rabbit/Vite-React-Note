@@ -9,6 +9,10 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
 
     // functions
     function handleChange(e) {
+        const parentElement = e.target.closest('div.iweb-input');
+        parentElement.classList.remove('error');
+        const existingErrors = parentElement.querySelectorAll('small.tips');
+        existingErrors.forEach(err => err.remove());
         setValue(e.target.value);
         if (onChange) { onChange(e) };
     };
@@ -29,7 +33,7 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
         return (
             <>
                 {alias && <label htmlFor={id} className="name">{alias}</label>}
-                <div className={`iweb-${type}`}>
+                <div className={`iweb-input iweb-${type}`}>
                     <div className="real">
                         <select {...commonProps}>
                             { options && (options.map((item, index) => (
@@ -45,18 +49,25 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
         return (
             <>
                 {alias && <label className="name">{alias}</label>}
-                <div className={`iweb-${type}-set`}>
+                <div className={`iweb-input iweb-${type}-set`}>
                     {options.map((item, index) => (
                         <div key={index} className={`iweb-${type}${type === 'radio' ? (defaultValue === item.value ? ' checked' : '') : (Array.isArray(defaultValue) && defaultValue.includes(item.value) ? ' checked' : '')}`}>
                             <input type={type}
                                 id={`${id}_${index}`}
                                 name={name}
                                 value={item.value}
+                                autoComplete="off"
+                                {...(validation && { "data-validation": validation })}
+                                {...(regex && { "data-regex": regex })}
+                                {...(translation && { "data-translation": translation })}
                                 checked={type === 'radio' ? defaultValue === item.value : Array.isArray(defaultValue) && defaultValue.includes(item.value)}
                                 onChange={(e) => {
                                     if(type === 'radio') {
                                         handleChange(e);
                                     } else {
+                                        const existingErrors = e.target.closest('div.iweb-input').querySelectorAll('small.tips');
+                                        existingErrors.forEach(err => err.remove());
+
                                         let newValue = Array.isArray(defaultValue) ? [...defaultValue] : [];
                                         if(e.target.checked) {
                                             newValue.push(item.value);
