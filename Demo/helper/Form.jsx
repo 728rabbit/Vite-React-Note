@@ -109,17 +109,44 @@ export function revisedFormData(form) {
         if (element.type === "checkbox") {
             if (processedNames.has(element.name)) continue; // Processed
             processedNames.add(element.name);
-
             const checkboxes = form.querySelectorAll(`input[name="${element.name}"]`);
             const values = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-            values.forEach(v => formData.append(element.name + '[]', v));
-
-        } else if (element.type === "radio") {
+            if (values.length === 1) {
+                formData.append(element.name, values[0]);
+            }
+            else {
+                values.forEach(v => formData.append(element.name + '[]', v));
+            }
+        } 
+        else if (element.type === "radio") {
             if (element.checked) formData.append(element.name, element.value);
-        } else {
+        } 
+        else {
             formData.append(element.name, element.value);
         }
     }
 
     return formData;
+}
+
+export function submitForm(e, transLang, callBack) {
+    e.preventDefault();
+    const form = e.target;
+    const valid = validateForm(form, transLang);
+    if (!valid) {
+        return;
+    }
+    const formData = revisedFormData(form);
+
+    fetch("http://localhost:8000/myprojects/mylib/postest.php", {
+        method: "POST",
+        body: formData,
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(typeof callBack === 'function') {
+            callBack(data);
+        }
+    })
+    .catch(err => console.error(err));
 }

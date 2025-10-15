@@ -152,18 +152,19 @@ header.page-header > div.logo > a:before {
     vertical-align: middle;
 }
 
-header.page-header > div.logo > a > img {
+header.page-header > div.logo > a > svg {
     display: inline-block;
     vertical-align: middle;
 }
 
 header.page-header > div.logo > a > span {
     display: inline-block;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     font-style: italic;
     color: var(--icolor-primary);
-    margin-left: 5px;
+    margin-left: 10px;
+    line-height: 1.25;
     vertical-align: middle
 }
 

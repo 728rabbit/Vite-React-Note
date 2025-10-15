@@ -18,6 +18,15 @@ const language = {
         errorTimeFormat: 'Invalid time format.',
         errorGE0: 'Value must be greater than or equal to 0.',
         errorGT0: 'Value must be greater than 0.',
+
+        panelName: 'AdminHub',
+        userName: 'User ID',
+        password: 'Password',
+        rememberMe: 'Remember Me?',
+        forgotPwd: 'Forgot password?',
+        loginNow: 'Login',
+        btnSubmit: 'Submit',
+
         themeColor: 'Theme color'
     },
     zh_hant: {
@@ -37,6 +46,15 @@ const language = {
         errorTimeFormat: '無效的時間格式。',
         errorGE0: '數值必須大於或等於 0。',
         errorGT0: '數值必須大於 0。',
+
+        panelName: '系統管理中心',
+        userName: '帳戶ID',
+        password: '密碼',
+        rememberMe: '保持登入狀態？',
+        forgotPwd: '忘記密碼？',
+        loginNow: '登入',
+        btnSubmit: '提交',
+
         themeColor: '主題色'
     },
     zh_hans: {
@@ -56,6 +74,15 @@ const language = {
         errorTimeFormat: '无效的时间格式。',
         errorGE0: '数值必须大於或等於 0。',
         errorGT0: '数值必须大於 0。',
+
+        panelName: '系统管理中心',
+        userName: '帐户ID',
+        password: '密码',
+        rememberMe: '保持登入状态？',
+        forgotPwd: '忘记密码？',
+        loginNow: '登入',
+        btnSubmit: '提交',
+
         themeColor: '主题色'
     }
 };

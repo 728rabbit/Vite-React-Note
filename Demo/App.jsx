@@ -8,6 +8,7 @@ import SelectBox from "./units/SelectBox.jsx";
 import { validateForm, revisedFormData} from "./helper/Form.jsx";
 import { useLang } from "./Language.jsx";
 import { useAuthn } from "./Authn.jsx";
+import { Login } from "./pages/Login.jsx";
 
 export default function App() {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -139,14 +140,6 @@ export default function App() {
         return <h1>聯絡我們</h1>;
     }
 
-    function Login() {
-        return (
-            <div>
-                <button onClick={() => renewAuthnToken("Abc")}>Login</button>
-            </div>
-        );
-    }
-
     function ForgotPwd() {
         return <h1>忘記密碼</h1>;
     }
@@ -171,8 +164,11 @@ export default function App() {
                   <header className="page-header">
                       <div className="logo">
                           <Link to="#">
-                              <img src={ favIcon } alt="logo-small"/>
-                              <span>網站管理平臺<br/><small>Website Management</small></span>
+                              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                  <circle cx="24" cy="24" r="22" fill="#525896"/>
+                                  <path d="M16 32L24 14L32 32H28L24 24L20 32H16Z" fill="white"/>
+                              </svg>
+                              <span>AdminHub<br/><small>系統管理中心</small></span>
                           </Link>
                       </div>
                       <div className="open">

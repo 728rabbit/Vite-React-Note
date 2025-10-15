@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuthn } from "./Authn.jsx";
 
 export default function LeftMenu({ isVisible = true, setIsVisible }) {
+    const { renewAuthnToken } = useAuthn();
     const [openIndex, setOpenIndex] = useState('pages');
     const leftMenu = 
     [
@@ -103,7 +105,8 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
         {
             name: '登出',
             icon: 'fa-sign-out',
-            url: '#'
+            url: '#',
+            islogout: true
         },
     ];
 
@@ -113,13 +116,19 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
         <ul>
           { leftMenu.map((item, index) => (
             <li key={ index }>
-              <Link to={ item.url } onClick={() => {
+              <Link to={ item.url } onClick={(e) => {
                 try {
-                    setOpenIndex(item.index); 
-                    setIsVisible(false); 
+                    if(item.islogout) {
+                        e.preventDefault(); 
+                        renewAuthnToken('');
+                    }
+                    else {
+                        setOpenIndex(item.index); 
+                        setIsVisible(false); 
+                    }
                 }
-                catch(e) {
-                    console.error(e);
+                catch(error) {
+                    console.error(error);
                 }
               }} target={ (item.target ?? '_self') }
               className={([((openIndex == item.index) ? 'current': ''), ((item.child) ? 'parent': '')].filter(Boolean).join(' ').trim())}>
@@ -129,7 +138,7 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
                 <ol className={((openIndex == item.index) ? 'show': '')}>
                   { item.child.map((sub_item, sub_index) => (
                     <li key={ sub_index }>
-                      <Link to={ sub_item.url }><FontAwesomeIcon icon={ sub_item.icon }/><span>{ sub_item.name }</span></Link>
+                        <Link to={ sub_item.url }><FontAwesomeIcon icon={ sub_item.icon }/><span>{ sub_item.name }</span></Link>
                     </li>
                   )) }
                 </ol>
