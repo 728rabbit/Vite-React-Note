@@ -1,7 +1,7 @@
-export function validateForm(form) {
+export function validateForm(form, transLang) {
     let valid = true;
 
-    // 先清空之前的錯誤訊息
+    // Clear the previous error message first
     const existingErrors = form.querySelectorAll('small.tips');
     existingErrors.forEach(err => err.remove());
 
@@ -21,68 +21,68 @@ export function validateForm(form) {
         for (let rule of rules) {
             // required
             if (rule === 'required') {
-            if (element.type === 'checkbox') {
-                if (processedCheckboxes.has(element.name)) continue;
-                processedCheckboxes.add(element.name);
-                const checkboxes = form.querySelectorAll(`input[name="${element.name}"]`);
-                const checked = Array.from(checkboxes).some(cb => cb.checked);
-                if (!checked) {
-                elementValid = false;
-                messages.push('必填');
+                if (element.type === 'checkbox') {
+                    if (processedCheckboxes.has(element.name)) continue;
+                    processedCheckboxes.add(element.name);
+                    const checkboxes = form.querySelectorAll(`input[name="${element.name}"]`);
+                    const checked = Array.from(checkboxes).some(cb => cb.checked);
+                    if (!checked) {
+                        elementValid = false;
+                        messages.push(transLang('errorRequired'));
+                    }
+                } else if (element.type === 'radio') {
+                    if (processedRadios.has(element.name)) continue;
+                    processedRadios.add(element.name);
+                    const radios = form.querySelectorAll(`input[name="${element.name}"]`);
+                    const checked = Array.from(radios).some(r => r.checked);
+                    if (!checked) {
+                        elementValid = false;
+                        messages.push(transLang('errorRequired'));
+                    }
+                } else {
+                    if (!element.value || element.value.trim() === '') {
+                        elementValid = false;
+                        messages.push(transLang('errorRequired'));
+                    }
                 }
-            } else if (element.type === 'radio') {
-                if (processedRadios.has(element.name)) continue;
-                processedRadios.add(element.name);
-                const radios = form.querySelectorAll(`input[name="${element.name}"]`);
-                const checked = Array.from(radios).some(r => r.checked);
-                if (!checked) {
-                elementValid = false;
-                messages.push('必填');
-                }
-            } else {
-                if (!element.value || element.value.trim() === '') {
-                elementValid = false;
-                messages.push('必填');
-                }
-            }
             }
 
             // email
             else if (rule === 'email') {
-            if (element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
-                elementValid = false;
-                messages.push('格式錯誤 (Email)');
-            }
+                if (element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorEmailFormat'));
+                }
             }
 
             // date
             else if (rule === 'date') {
-            if (element.value && !/^\d{4}-\d{2}-\d{2}$/.test(element.value)) {
-                elementValid = false;
-                messages.push('格式錯誤 (YYYY-MM-DD)');
-            }
+                if (element.value && !/^\d{4}-\d{2}-\d{2}$/.test(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorDateFormat'));
+                }
             }
 
             // time
             else if (rule === 'time') {
-            if (element.value && !/^\d{2}:\d{2}$/.test(element.value)) {
-                elementValid = false;
-                messages.push('格式錯誤 (HH:MM)');
-            }
+                if (element.value && !/^\d{2}:\d{2}$/.test(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorTimeFormat'));
+                }
             }
 
             // regex
             else if (rule.startsWith('regex:')) {
-            const pattern = rule.replace('regex:', '');
-            const regex = new RegExp(pattern);
-            if (element.value && !regex.test(element.value)) {
-                elementValid = false;
-                messages.push('格式錯誤');
-            }
+                const pattern = rule.replace('regex:', '');
+                const regex = new RegExp(pattern);
+                if (element.value && !regex.test(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorRequired'));
+                }
             }
         }
 
-        // 如果有錯誤，插入到 input 下方
+        // If there is an error, insert below the input
         if (!elementValid) {
             valid = false;
             const errorDiv = document.createElement('small');
@@ -101,13 +101,13 @@ export function validateForm(form) {
 export function revisedFormData(form) {
     const formData = new FormData();
 
-    // 遍歷表單元素
+    // Traverse the form elements
     const processedNames = new Set();
     for (let element of form.elements) {
         if (!element.name) continue;
 
         if (element.type === "checkbox") {
-            if (processedNames.has(element.name)) continue; // 已處理過
+            if (processedNames.has(element.name)) continue; // Processed
             processedNames.add(element.name);
 
             const checkboxes = form.querySelectorAll(`input[name="${element.name}"]`);

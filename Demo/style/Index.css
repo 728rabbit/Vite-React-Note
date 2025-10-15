@@ -975,6 +975,7 @@ div.iweb-checkbox:before {
     vertical-align: middle;
 }
 
+div.iweb-checkbox-set.error > div.iweb-checkbox:before,
 div.iweb-checkbox.error:before {
     border-color: var(--icolor-lightred) !important;
 }
@@ -1047,6 +1048,7 @@ div.iweb-radio:before {
     vertical-align: middle;
 }
 
+div.iweb-radio-set.error > div.iweb-checkbox:before,
 div.iweb-radio.error:before {
     border-color: var(--icolor-lightred) !important;
 }
