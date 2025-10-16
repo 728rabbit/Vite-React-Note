@@ -21,10 +21,19 @@ const language = {
 
         panelName: 'AdminHub',
         userName: 'User ID',
+        displayName: 'Display Name',
         password: 'Password',
         rememberMe: 'Remember Me?',
         forgotPwd: 'Forgot password?',
         loginNow: 'Login',
+   
+        profile: 'Profile',
+        email: 'Email',
+        repeatPassword: 'Repeat Password',
+        passwordNotMath: 'The password and repeat password do not match.',
+
+        btnReset: 'Reset',
+        btnSave: 'Save',
         btnSubmit: 'Submit',
 
         themeColor: 'Theme color'
@@ -49,10 +58,19 @@ const language = {
 
         panelName: '系統管理中心',
         userName: '帳戶ID',
+        displayName: '顯示名稱',
         password: '密碼',
         rememberMe: '保持登入狀態？',
         forgotPwd: '忘記密碼？',
         loginNow: '登入',
+
+        profile: '個人資料',
+        email: '電郵',
+        repeatPassword: '重複密碼',
+        passwordNotMath: '密碼與重複密碼不一致。',
+
+        btnReset: '重設',
+        btnSave: '儲存',
         btnSubmit: '提交',
 
         themeColor: '主題色'
@@ -77,10 +95,19 @@ const language = {
 
         panelName: '系统管理中心',
         userName: '帐户ID',
+        displayName: '显示名称',
         password: '密码',
         rememberMe: '保持登入状态？',
         forgotPwd: '忘记密码？',
         loginNow: '登入',
+
+        profile: '个人资料',
+        email: '电邮',
+        repeatPassword: '重复密码',
+        passwordNotMath: '密码与重复密码不一致。',
+
+        btnReset: '重设',
+        btnSave: '储存',
         btnSubmit: '提交',
 
         themeColor: '主题色'

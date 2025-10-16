@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function TxtBox({name, value = '', onChange = null, extra = {}}) {
@@ -10,14 +10,23 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
     const [defaultValue, setValue] = useState(value);
     const [passwordMode, setPasswordMode] = useState(true);
     
+    // Synchronize external value
+    useEffect(() => {
+        setValue(value);
+    }, [value]);
+
     // functions
     function handleChange(e) {
         const parentElement = e.target.closest('div.iweb-input');
         parentElement.classList.remove('error');
         const existingErrors = parentElement.querySelectorAll('small.tips');
         existingErrors.forEach(err => err.remove());
-        setValue(e.target.value);
-        if (onChange) { onChange(e) };
+        if (onChange) { 
+            onChange(e.target.value) 
+        }
+        else {
+            setValue(e.target.value);
+        }
     };
 
     function switchPwdMode() {

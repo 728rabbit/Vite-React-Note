@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function SelectBox({name, options = [], value = '', onChange = null, extra = {}}) {
     // init
     const { type = "select", id = name, alias, validation, regex, translation } = extra;
     const [defaultValue, setValue] = useState(value);
-    //options = [{ value: '', label: '請選擇' }, ...options];
+
+    // Synchronize external value
+    useEffect(() => {
+        setValue(value);
+    }, [value]);
 
     // functions
     function handleChange(e) {
@@ -13,8 +17,12 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
         parentElement.classList.remove('error');
         const existingErrors = parentElement.querySelectorAll('small.tips');
         existingErrors.forEach(err => err.remove());
-        setValue(e.target.value);
-        if (onChange) { onChange(e) };
+        if (onChange) { 
+            onChange(e.target.value) 
+        }
+        else {
+            setValue(e.target.value);
+        }
     };
 
     // view

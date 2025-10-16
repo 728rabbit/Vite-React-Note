@@ -109,7 +109,7 @@ div.widget.top div.controls {
 
 div.widget.top div.controls button.btn,
 div.widget.top div.controls a.btn{
-    margin-left: 2px;
+    margin-left: 8px;
 }
 
 div.widget.top.fixed {
@@ -370,13 +370,16 @@ nav.path > div > ul > li {
     display: inline-block;
 }
 
-nav.path > div > ul > li > a {
-    display: block;
-    line-height: 20px;
+nav.path > div > ul > li > svg {
+    display: inline-block;
+    margin: 0px 4px;
+    vertical-align: middle;
 }
 
-nav.path > div > ul > li > i {
-    margin: 0px 5px;
+nav.path > div > ul > li > a {
+    display: inline-block;
+    line-height: 20px;
+    vertical-align: middle;
 }
 
 nav.path > div > ul > li:last-child > a {

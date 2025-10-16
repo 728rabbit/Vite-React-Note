@@ -9,7 +9,7 @@ import { useAuthn } from '../Authn.jsx';
 export function Login() {
     // Global value
     const { transLang } = useLang();
-    const { renewAuthnToken } = useAuthn();
+    const { renewAuthnToken, tipsMessage, renewTipsMessage } = useAuthn();
 
     // View
     return (
@@ -28,7 +28,15 @@ export function Login() {
                             renewAuthnToken(responseData.access_token);
                         }
                     })}>
-                        <div className="page-message iweb-tips-message"></div>
+                        <div className={`page-message iweb-tips-message ${tipsMessage?.type || ''}`}>
+                        {tipsMessage?.text && (
+                            <div>
+                                <span>{tipsMessage.text}</span>
+                                <a href="#" onClick={() => renewTipsMessage(null)} className="close">×</a>
+                            </div>
+                        )}
+                        </div>
+
                         <div><TxtBox name="action_index" value="login" extra={{ type: 'hidden'}}/></div>
                         <div className="iweb-row">
                             <TxtBox name="username" value="" extra={{ alias: transLang('userName'), validation: 'required'}}/>

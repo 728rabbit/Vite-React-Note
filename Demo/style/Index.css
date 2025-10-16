@@ -419,22 +419,22 @@ button.btn-icon {
     width: 36px;
 }
 
-button.btn > i,
-a.btn > i {
+button.btn > svg,
+a.btn > svg {
     display: inline-block;
     color: var(--icolor-white);
-    vertical-align: baseline;
+    vertical-align: middle;
 }
 
 button.btn > span,
 a.btn > span {
     display: inline-block;
     color: var(--icolor-white);
-    vertical-align: baseline;
+    vertical-align: middle;
 }
 
-button.btn > i + span,
-a.btn > i + span {
+button.btn > svg + span,
+a.btn > svg + span {
     margin-left: 4px;
 }
 

@@ -2,6 +2,12 @@ export function validateForm(form, transLang) {
     let valid = true;
 
     // Clear the previous error message first
+    const tipsArea = form.querySelector('div.iweb-tips-message');
+    if(tipsArea) {
+        tipsArea.classList.remove('error', 'success');
+        tipsArea.innerHTML = '';
+    }
+
     const existingErrors = form.querySelectorAll('small.tips');
     existingErrors.forEach(err => err.remove());
 
@@ -136,7 +142,7 @@ export function revisedFormData(form) {
     for (let element of form.elements) {
         if (!element.name) continue;
 
-        if (element.type === "checkbox") {
+        if (element.type === 'checkbox') {
             if (processedNames.has(element.name)) continue; // Processed
             processedNames.add(element.name);
             const checkboxes = form.querySelectorAll(`input[name="${element.name}"]`);
@@ -148,9 +154,23 @@ export function revisedFormData(form) {
                 values.forEach(v => formData.append(element.name + '[]', v));
             }
         } 
-        else if (element.type === "radio") {
-            if (element.checked) formData.append(element.name, element.value);
+        else if (element.type === 'radio') {
+            if (element.checked) { 
+                formData.append(element.name, element.value);
+            }
         } 
+        else if (element.type === 'file') {
+            const files = element.files;
+            if (files) {
+                if (element.multiple) {
+                    for (let i = 0; i < files.length; i++) {
+                        formData.append(element.name + '[]', files[i]);
+                    }
+                } else if (files.length > 0) {
+                    formData.append(element.name, files[0]);
+                }
+            }
+        }
         else {
             formData.append(element.name, element.value);
         }
@@ -160,13 +180,16 @@ export function revisedFormData(form) {
 }
 
 let isSubmitting = false;
-export function submitForm(e, transLang, callBack) {
+export function submitForm(e, transLang, callBack, extraFunc) {
     e.preventDefault();
     if (isSubmitting) { return; }
     isSubmitting = true;
 
     const form = e.target;
-    const valid = validateForm(form, transLang);
+    let valid = validateForm(form, transLang);
+    if(valid && typeof extraFunc === 'function') {
+        valid = valid && extraFunc();
+    }
     if (!valid) { isSubmitting = false; return; }
 
     // Remove error message if need
@@ -190,7 +213,7 @@ export function submitForm(e, transLang, callBack) {
             }
         }
         else {
-            if(tipsArea) {
+            if(tipsArea && data.message) {
                 const msgDiv = document.createElement('div');
                 const closeBtn = document.createElement('a');
                 closeBtn.className = 'close';

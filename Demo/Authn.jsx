@@ -6,6 +6,7 @@ export function AuthnProvider({ children }) {
     const [authnToken, setAuthnToken] = useState(localStorage.getItem('authnToken') || '');
     const [authnInfo, setAuthnInfo] = useState(null);
     const [authnLoading, setAuthnLoading] = useState(true);
+    const [tipsMessage, setTipsMessage] = useState(null);
 
     // When the token has a value, automatically obtain user information from the API
     useEffect(() => {
@@ -28,9 +29,9 @@ export function AuthnProvider({ children }) {
                         },
                         body: formData
                     });
-                    const data = await res.json();
-                    if (data.status === 200) {
-                        setAuthnInfo(data.result);
+                    const responseData = await res.json();
+                    if (responseData.status === 200) {
+                        setAuthnInfo(responseData.user);
                     } else {
                         renewAuthnToken('');
                     }
@@ -56,8 +57,12 @@ export function AuthnProvider({ children }) {
         setAuthnInfo(userData);
     };
 
+    const renewTipsMessage = (messageData) => {
+        setTipsMessage(messageData);
+    };
+
     return (
-        <AuthnContext.Provider value={{ authnToken, authnInfo, authnLoading, renewAuthnToken, renewAuthnInfo }}>
+        <AuthnContext.Provider value={{ authnToken, authnInfo, authnLoading, tipsMessage, renewAuthnToken, renewAuthnInfo, renewTipsMessage }}>
             {children}
         </AuthnContext.Provider>
     );
