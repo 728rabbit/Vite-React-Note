@@ -29,7 +29,7 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
     const commonProps = {
         id,
         name,
-        value: defaultValue,
+        value: (onChange ? value: defaultValue),
         onChange: handleChange,
         autoComplete: 'off',
         ...(validation && { "data-validation": validation }),
@@ -82,8 +82,13 @@ export default function SelectBox({name, options = [], value = '', onChange = nu
                                         } else {
                                             newValue = newValue.filter(v => v !== item.value);
                                         }
-                                        setValue(newValue);
-                                        if(onChange) onChange({ target: { name, value: newValue }});
+                                        
+                                        if (onChange) { 
+                                            if(onChange) onChange({ target: { name, value: newValue }});
+                                        }
+                                        else {
+                                            setValue(newValue);
+                                        }
                                     }
                                 }}
                             />
