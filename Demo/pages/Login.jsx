@@ -7,9 +7,11 @@ import { submitForm } from "../helper/Form.jsx";
 import { useAuthn } from '../Authn.jsx';
 
 export function Login() {
+    // Global value
     const { transLang } = useLang();
     const { renewAuthnToken } = useAuthn();
 
+    // View
     return (
         <div className="page-content authn">
             <div className="widget">
@@ -23,11 +25,11 @@ export function Login() {
                 <div className="form">
                     <form id="loginForm" method="post" onSubmit={(e) => submitForm(e, transLang, function(responseData) {
                         if(responseData) {
-                            console.log(responseData);
-                            renewAuthnToken('Abc');
+                            renewAuthnToken(responseData.access_token);
                         }
                     })}>
                         <div className="page-message iweb-tips-message"></div>
+                        <div><TxtBox name="action_index" value="login" extra={{ type: 'hidden'}}/></div>
                         <div className="iweb-row">
                             <TxtBox name="username" value="" extra={{ alias: transLang('userName'), validation: 'required'}}/>
                         </div>

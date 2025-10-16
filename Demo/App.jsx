@@ -12,122 +12,12 @@ import { Login } from "./pages/Login.jsx";
 
 export default function App() {
     const [menuVisible, setMenuVisible] = useState(false);
-    const { lang, changeLang, transLang } = useLang();
-    const { authnInfo, renewAuthnToken } = useAuthn();
-    
-    console.log(authnInfo);
-
-    function handleSubmit(e) {
-        e.preventDefault(); // 阻止頁面刷新
-        const form = e.target;
-
-        const valid = validateForm(form, transLang);
-
-        if (!valid) {
-            alert('表單驗證失敗');
-            return;
-        }
-
-        const formData = revisedFormData(form);
-
-        // 發送到 PHP
-        fetch("http://localhost:8000/myprojects/mylib/postest.php", {
-          method: "POST",
-          body: formData,
-        })
-        .then(res => res.text())
-        .then(data => {
-          console.log("PHP 回傳:", data);
-        })
-        .catch(err => console.error(err));
-    }
+    const { authnInfo, authnLoading } = useAuthn();
 
     function Home() {
         return (
           <>
             <h1>首頁</h1>
-              <div>
-                  <p>目前語言: {lang}</p>
-                  <button onClick={() => changeLang("zh_hant")}>繁體中文</button>
-                  <button onClick={() => changeLang("zh_hans")}>简体中文</button>
-                  <button onClick={() => changeLang("en")}>English</button>
-                  { !authnInfo && (
-                  <button onClick={() => renewAuthnToken("Abc")}>Login</button>
-                  )}
-
-                  { authnInfo && (
-                  <button onClick={() => renewAuthnToken("")}>Logout</button>
-                  )}
-              </div>
-              <form id="demoform" method="post" action="http://localhost:8000/myprojects/mylib/postest.php"
-              onSubmit={handleSubmit}>
-                <div className="widget">
-                  <div className="iweb-row">
-                      <TxtBox name="owner_name" value="ABC" extra={{ alias: '網站名稱', validation: 'required'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="owner_date" value="" extra={{ type: 'date', alias: '日期', validation: 'required|date'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="owner_time" value="" extra={{ type: 'time', step: 1800, alias: '時間', validation: 'required|time'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="theme_color" value="" extra={{ type: 'color', alias: transLang('themeColor')}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="owner_email" value="" extra={{ type: 'email', alias: '電郵', validation: 'required|email'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="password" value="" extra={{ type: 'password', alias: '密碼', validation: 'required|passowrd'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <TxtBox name="owner_description" value="Hello world" extra={{ type: 'textarea', alias: '網站名稱', validation: 'required'}}/>
-                  </div>
-                  <div className="iweb-row">
-                      <SelectBox
-                        name="category"
-                        value=""
-                        options={
-                        [
-                          {value: '', label: "請選擇"}, 
-                          {value: 1, label: "科技"}, 
-                          {value: 2, label: "生活"}, 
-                          {value: 3, label: "教育"}
-                        ]}
-                        extra={{ alias: "分類", validation: 'required' }}
-                        onChange={(e) => console.log('選中值:', e.target.value)}
-                      />
-                  </div>
-                  <div className="iweb-row">
-                      <SelectBox
-                        name="hobby"
-                        value={['1','3']}
-                        options={[
-                          { value: '1', label: '閱讀' },
-                          { value: '2', label: '旅行' },
-                          { value: '3', label: '音樂' },
-                        ]}
-                        extra={{ alias: '興趣', type: 'checkbox', validation: 'required' }}
-                        onChange={(e) => console.log('選中值:', e.target.value)}
-                      />
-                  </div>
-                  <div className="iweb-row">
-                      <SelectBox
-                        name="gender"
-                        value="M"
-                        options={[
-                          { value: "M", label: "男" },
-                          { value: "F", label: "女" },
-                        ]}
-                        extra={{ alias: "性別", type: "radio", validation: 'required' }}
-                        onChange={(e) => console.log('選中值:', e.target.value)}
-                      />
-                  </div>
-                  <div className="iweb-row">
-                    <button type="submit">提交</button>
-                  </div>
-                </div>
-              </form>
           </>
         );
     }
@@ -149,55 +39,63 @@ export default function App() {
     }
 
     function ProtectedRoute({ children, authnInfo }) {
-        if (!authnInfo) {
-            // 未登入，導向登入頁面
-            return <Navigate to="/" replace />;
-        }
+        if (!authnInfo) { return <Navigate to="/" replace />; }
         return children;
     }
 
-
+    if(authnLoading) { 
         return (
             <>
-               {authnInfo && (
+                <div className="page-loading">
+                    <div className="spinner"></div>
+                    <div className="tips">Loading, please wait...</div>
+                </div>
+            </>
+        ); 
+    }
+    else {
+        return (
+            <>
+                {authnInfo && (
                 <>
-                  <header className="page-header">
-                      <div className="logo">
-                          <Link to="#">
-                              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                                  <circle cx="24" cy="24" r="22" fill="#525896"/>
-                                  <path d="M16 32L24 14L32 32H28L24 24L20 32H16Z" fill="white"/>
-                              </svg>
-                              <span>AdminHub<br/><small>系統管理中心</small></span>
-                          </Link>
-                      </div>
-                      <div className="open">
-                          <Link onClick={() => setMenuVisible(!menuVisible)}><FontAwesomeIcon icon="fa-indent" className="icon-white"/></Link>
-                      </div>
-                      <div className="welcome">
-                          <Link to="/about">Hi, <u>{ authnInfo ? authnInfo.displayname: 'Guest'}</u></Link>
-                      </div>
-                  </header>
-                  <LeftMenu isVisible={menuVisible} setIsVisible={setMenuVisible}/>
-                  <nav className="path">
-                      <div>
-                          <ul>
+                    <header className="page-header">
+                        <div className="logo">
+                            <Link to="#">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                    <circle cx="24" cy="24" r="22" fill="#525896"/>
+                                    <path d="M16 32L24 14L32 32H28L24 24L20 32H16Z" fill="white"/>
+                                </svg>
+                                <span>AdminHub<br/><small>系統管理中心</small></span>
+                            </Link>
+                        </div>
+                        <div className="open">
+                            <Link onClick={() => setMenuVisible(!menuVisible)}><FontAwesomeIcon icon="fa-indent" className="icon-white"/></Link>
+                        </div>
+                        <div className="welcome">
+                            <Link to="/about">Hi, <u>{ authnInfo ? authnInfo.display_name: 'Guest'}</u></Link>
+                        </div>
+                    </header>
+                    <LeftMenu isVisible={menuVisible} setIsVisible={setMenuVisible}/>
+                    <nav className="path">
+                        <div>
+                            <ul>
                             <li><Link to="#">網站頁面</Link></li>
-                          </ul>
-                      </div>
-                  </nav>
+                            </ul>
+                        </div>
+                    </nav>
                 </>
-              )}
+                )}
                 <main className={`page-body${!authnInfo ? ' full' : ''}`}>
                     <Routes>
                         <Route path="/" element={authnInfo ? <Home /> : <Login />}  />
                         <Route path="/about" element={<ProtectedRoute authnInfo={authnInfo}><About /></ProtectedRoute>} />
                         <Route path="/contact" element={<ProtectedRoute authnInfo={authnInfo}><Contact /></ProtectedRoute>} />
-      
+        
                         <Route path="/forgot" element={<ForgotPwd />} />
                         <Route path="/reset" element={<ResetPwd />} />
                     </Routes>
                 </main>
             </>
         );
+    }
 }

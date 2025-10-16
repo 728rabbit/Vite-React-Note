@@ -5,9 +5,9 @@ export function validateForm(form, transLang) {
     const existingErrors = form.querySelectorAll('small.tips');
     existingErrors.forEach(err => err.remove());
 
+    // Recursive check once
     const processedCheckboxes = new Set();
     const processedRadios = new Set();
-
     for (let element of form.elements) {
         if (!element.name) continue;
 
@@ -19,7 +19,7 @@ export function validateForm(form, transLang) {
         let messages = [];
 
         for (let rule of rules) {
-            // required
+            // Required
             if (rule === 'required') {
                 if (element.type === 'checkbox') {
                     if (processedCheckboxes.has(element.name)) continue;
@@ -47,7 +47,15 @@ export function validateForm(form, transLang) {
                 }
             }
 
-            // email
+            // Password
+            else if (rule === 'password') {
+                if (element.value &&  !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorPasswordFormat'));
+                }
+            }
+
+            // Email
             else if (rule === 'email') {
                 if (element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
                     elementValid = false;
@@ -55,7 +63,7 @@ export function validateForm(form, transLang) {
                 }
             }
 
-            // date
+            // Date
             else if (rule === 'date') {
                 if (element.value && !/^\d{4}-\d{2}-\d{2}$/.test(element.value)) {
                     elementValid = false;
@@ -63,7 +71,7 @@ export function validateForm(form, transLang) {
                 }
             }
 
-            // time
+            // Time
             else if (rule === 'time') {
                 if (element.value && !/^\d{2}:\d{2}$/.test(element.value)) {
                     elementValid = false;
@@ -71,7 +79,29 @@ export function validateForm(form, transLang) {
                 }
             }
 
-            // regex
+            // Number
+            else if (rule === 'number') {
+                 if (element.value && isNaN(element.value)) {
+                    elementValid = false;
+                    messages.push(transLang('errorNumberFormat'));
+                }
+            }
+
+            else if (rule === 'ge0') {
+                 if (element.value && !isNaN(element.value) && Number(element.value) < 0) {
+                    elementValid = false;
+                    messages.push(transLang('errorGE0'));
+                }
+            }
+
+            else if (rule === 'gt0') {
+                 if (element.value && !isNaN(element.value) && Number(element.value) <= 0) {
+                    elementValid = false;
+                    messages.push(transLang('errorGT0'));
+                }
+            }
+
+            // Regex
             else if (rule.startsWith('regex:')) {
                 const pattern = rule.replace('regex:', '');
                 const regex = new RegExp(pattern);
@@ -129,24 +159,61 @@ export function revisedFormData(form) {
     return formData;
 }
 
+let isSubmitting = false;
 export function submitForm(e, transLang, callBack) {
     e.preventDefault();
+    if (isSubmitting) { return; }
+    isSubmitting = true;
+
     const form = e.target;
     const valid = validateForm(form, transLang);
-    if (!valid) {
-        return;
-    }
-    const formData = revisedFormData(form);
+    if (!valid) { isSubmitting = false; return; }
 
-    fetch("http://localhost:8000/myprojects/mylib/postest.php", {
-        method: "POST",
+    // Remove error message if need
+    const tipsArea = form.querySelector('div.iweb-tips-message');
+    if(tipsArea) {
+        tipsArea.classList.remove('error', 'success');
+        tipsArea.innerHTML = '';
+    }
+
+    // Post form data to api
+    const formData = revisedFormData(form);
+    fetch('http://localhost:8000/myprojects/mylib/reactAPI.php', {
+        method: 'POST',
         body: formData,
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => {
-        if(typeof callBack === 'function') {
-            callBack(data);
+        if(data.status === 200) {
+            if(typeof callBack === 'function') {
+                callBack(data);
+            }
+        }
+        else {
+            if(tipsArea) {
+                const msgDiv = document.createElement('div');
+                const closeBtn = document.createElement('a');
+                closeBtn.className = 'close';
+                closeBtn.href = 'javascript:void(0)';
+                closeBtn.textContent = '×';
+                closeBtn.addEventListener('click', () => {
+                    tipsArea.innerHTML = '';
+                    tipsArea.classList.remove('error', 'success');
+                });
+                const span = document.createElement('span');
+                span.textContent = data.message;
+                msgDiv.appendChild(closeBtn);
+                msgDiv.appendChild(span);
+                tipsArea.appendChild(msgDiv);
+                tipsArea.classList.add('error');
+            }
+            else {
+                alert(data.message);
+            }
         }
     })
-    .catch(err => console.error(err));
+    .catch(ex => console.error(ex))
+    .finally(() => {
+        isSubmitting = false;
+    });
 }
