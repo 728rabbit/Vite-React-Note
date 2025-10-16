@@ -52,8 +52,12 @@ export function AuthnProvider({ children }) {
         if (!token) setAuthnInfo(null);
     };
 
+    const renewAuthnInfo = (userData) => {
+        setAuthnInfo(userData);
+    };
+
     return (
-        <AuthnContext.Provider value={{ authnToken, authnInfo, authnLoading, renewAuthnToken }}>
+        <AuthnContext.Provider value={{ authnToken, authnInfo, authnLoading, renewAuthnToken, renewAuthnInfo }}>
             {children}
         </AuthnContext.Provider>
     );
