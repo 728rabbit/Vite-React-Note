@@ -13,6 +13,7 @@ export function AuthnProvider({ children }) {
         if (!authnToken) {
             setAuthnInfo(null);
             setAuthnLoading(false);
+            setTipsMessage(null);
             return;
         }
 

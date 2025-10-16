@@ -37,7 +37,7 @@ export default function TxtBox({name, value = '', onChange = null, extra = {}}) 
     const commonProps = {
         id,
         name,
-        value: defaultValue,
+        value: (onChange ? value: defaultValue),
         onChange: handleChange,
         autoComplete: 'off',
         ...(placeholder && { placeholder }),
