@@ -42,12 +42,6 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
             url: '/profile'
         },
         {
-            name: '我的網站',
-            icon: 'fa-desktop',
-            url: '#',
-            target: '_blank'
-        },
-        {
             name: '登出',
             icon: 'fa-sign-out',
             url: '#',
