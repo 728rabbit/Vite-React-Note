@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react';
 const TipsContext = createContext();
 
 export function TipsProvider({ children }) {
-    const [tipsMessage, setTipsMessage] = useState({ type: 'none', text: '' });
+    const [tipsMessage, setTipsMessage] = useState({ type: 'default', text: '' });
 
     return (
         <TipsContext.Provider value={{ tipsMessage, setTipsMessage}}>

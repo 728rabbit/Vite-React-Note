@@ -13,7 +13,7 @@ export function Profile() {
     const { setPageExpand, setPagePath } = useLayout();
     const { transLang } = useLang();
     const { tipsMessage, setTipsMessage } = useTips();
-    const { authnInfo, renewAuthnInfo } = useAuthn();
+    const { authnToken, authnInfo, renewAuthnInfo } = useAuthn();
 
     let defaultFormValues = useMemo(() => ({
         username: authnInfo.username ?? '',
@@ -66,7 +66,7 @@ export function Profile() {
                     return false;
                 }
                 return true;
-            })}>
+            }, authnToken)}>
                 <div className="widget thin top fixed">
                     <div className="controls">
                         <button type="button" className="btn btn-red" onClick={() => {
@@ -81,7 +81,7 @@ export function Profile() {
                     <div className="clearboth"></div>
                 </div>
 
-                <TipsBox type={tipsMessage.type ?? ''} txt={tipsMessage.txt ?? ''} />
+                <TipsBox type={tipsMessage.type ?? ''} text={tipsMessage.text ?? ''} />
 
                 <div><TextBox name="action_index" value="update_profile" extra={{ type: 'hidden'}}/></div>
 

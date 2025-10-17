@@ -31,7 +31,7 @@ export function Signin() {
                             renewAuthnToken(responseData.access_token);
                         }
                     })}>
-                        <TipsBox type={tipsMessage.type ?? ''} txt={tipsMessage.txt ?? ''} />
+                        <TipsBox type={tipsMessage.type ?? ''} text={tipsMessage.text ?? ''} />
 
                         <div><TextBox name='action_index' value='login' extra={{ type: 'hidden'}}/></div>
                         <div className='iweb-row'>

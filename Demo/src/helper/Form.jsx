@@ -182,7 +182,7 @@ export function revisedFormData(form) {
 }
 
 let isSubmitting = false;
-export function submitForm(e, transLang, callBack, extraFunc) {
+export function submitForm(e, transLang, callBack, extraFunc, authnToken = '') {
     e.preventDefault();
     if (isSubmitting) { return; }
     isSubmitting = true;
@@ -207,14 +207,20 @@ export function submitForm(e, transLang, callBack, extraFunc) {
     spinner.innerHTML = '<div class="spinner"></div><div class="tips">Processing...</div>';
     document.body.appendChild(spinner);
 
+    console.log(authnToken);
+
     // Post form data to api
     const formData = revisedFormData(form);
     fetch(API_URL, {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${authnToken}`
+        },
         body: formData,
     })
     .then(res => res.json())
     .then(data => {
+        console.log(data);
         if(data.status === 200) {
             if(typeof callBack === 'function') {
                 callBack(data);

@@ -25,7 +25,7 @@ export default function App() {
         const elements = {};
         Object.entries(protectedPages).forEach(([path, Component]) => {
             elements[path] = (
-                <ProtectedRoute authnInfo={authnInfo}>
+                <ProtectedRoute authnInfo={ authnInfo }>
                     <Component/>
                 </ProtectedRoute>
             );
@@ -80,10 +80,10 @@ export default function App() {
                             </Link>
                         </div>
                         <div className='open'>
-                            <Link onClick={() => setMenuVisible(!menuVisible)}><FontAwesomeIcon icon='fa-indent' className='icon-white'/></Link>
+                            <Link onClick={ () => setMenuVisible(!menuVisible) }><FontAwesomeIcon icon='fa-indent' className='icon-white'/></Link>
                         </div>
                         <div className='welcome'>
-                            <Link to='/profile'>Hi, <u>{ authnInfo ? authnInfo.display_name: 'Guest'}</u></Link>
+                            <Link to='/profile'>Hi, <u>{ authnInfo ? authnInfo.display_name: 'Guest' }</u></Link>
                         </div>
                     </header>
                     <LeftMenu isVisible={menuVisible} setIsVisible={setMenuVisible}/>
@@ -93,7 +93,7 @@ export default function App() {
                                 <li><Link to='/'>主頁</Link></li>
                                 {pagePath && (
                                     pagePath.map((item, index) => (
-                                        <li key={index}><FontAwesomeIcon icon="fa-angle-right" /><Link to={item.url}>{item.name}</Link></li>
+                                        <li key={ index }><FontAwesomeIcon icon="fa-angle-right" /><Link to={ item.url }>{ item.name }</Link></li>
                                     ))
                                 )}
                             </ul>
@@ -103,14 +103,14 @@ export default function App() {
                 )}
                 <main className={`page-body${!authnInfo ? ' full' : (pageExpand ? ' expand': '')}`}>
                     <Routes>
-                        <Route path='/' element={authnInfo ? protectedRoutes.home : <SigninPage />}  />
+                        <Route path='/' element={ authnInfo ? protectedRoutes.home : <SigninPage /> }  />
 
-                        <Route path="/profile" element={protectedRoutes.profile} />
-                        <Route path="/about" element={protectedRoutes.about} />
-                        <Route path="/contact" element={protectedRoutes.contact} />
+                        <Route path="/profile" element={ protectedRoutes.profile } />
+                        <Route path="/about" element={ protectedRoutes.about } />
+                        <Route path="/contact" element={ protectedRoutes.contact } />
 
-                        <Route path='/forgot' element={<ForgotPwd />} />
-                        <Route path='/reset' element={<ResetPwd />} /> 
+                        <Route path='/forgot' element={ <ForgotPwd /> } />
+                        <Route path='/reset' element={ <ResetPwd /> } /> 
                     </Routes>
                 </main>
             </>
