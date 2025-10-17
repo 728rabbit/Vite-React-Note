@@ -398,6 +398,10 @@ nav.path > div > ul > li > a {
     vertical-align: middle;
 }
 
+nav.path > div > ul > li:first-child > svg {
+    display: none;
+}
+
 nav.path > div > ul > li:last-child > a {
     font-weight: bold;
     color: var(--icolor-primary);

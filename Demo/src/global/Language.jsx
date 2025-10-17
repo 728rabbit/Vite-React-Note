@@ -38,6 +38,7 @@ const language = {
         btnSave: 'Save',
         btnSubmit: 'Submit',
 
+        dashBoard: 'DashBoard',
         themeColor: 'Theme color'
     },
     zh_hant: {
@@ -77,6 +78,7 @@ const language = {
         btnSave: '儲存',
         btnSubmit: '提交',
 
+        dashBoard: '儀表板',
         themeColor: '主題色'
     }
 };

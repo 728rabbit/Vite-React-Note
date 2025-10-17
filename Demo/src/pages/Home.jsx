@@ -12,7 +12,7 @@ export function Home() {
     // Init
     useEffect(() => {
         setPageExpand(false);
-        setPagePath(null);
+        setPagePath([{ name: transLang('dashBoard'), url: '/'}]);
     }, []);
 
     return (

@@ -7,71 +7,14 @@ import { useAuthn } from '../global/Authn.jsx';
 export default function LeftMenu({ isVisible = true, setIsVisible }) {
     const { renewAuthnToken } = useAuthn();
     const { setTipsMessage } = useTips();
-    const [openIndex, setOpenIndex] = useState('pages');
+    const [openIndex, setOpenIndex] = useState('home');
     const leftMenu = 
     [
         {
-            index: 'pages',
-            name: '網站頁面',
-            icon: 'fa-book',
+            index: 'home',
+            name: '儀表板',
+            icon: 'fa-home',
             url: '/'
-        },
-        {
-            index: 'herobanner',
-            name: '焦點橫幅',
-            icon: 'fa-star',
-            url: '/about'
-        },
-        {
-            index: 'service',
-            name: '服務項目',
-            icon: 'fa-heart',
-            url: '/contact'
-        },
-        {
-            index: 'mediafile',
-            name: '媒體檔案',
-            icon: 'fa-cloud-upload',
-            url: '#'
-        },
-        {
-            index: 'setting',
-            name: '設置',
-            icon: 'fa-gears',
-            url: '#',
-            child: 
-            [
-                {
-                    name: '基本資料',
-                    icon: 'fa-info-circle',
-                    url: '#'
-                },
-                {
-                    name: '網站XML',
-                    icon: 'fa-sitemap',
-                    url: '#'
-                },
-                {
-                    name: '第三方代碼',
-                    icon: 'fa-code',
-                    url: '#'
-                },
-                {
-                    name: '電郵發送',
-                    icon: 'fa-envelope',
-                    url: '#'
-                },
-                {
-                    name: '電郵收件',
-                    icon: 'fa-envelope',
-                    url: '#'
-                },
-                {
-                    name: '白名單',
-                    icon: 'fa-warning',
-                    url: '#'
-                }
-            ]
         },
         {
             index: 'privilege',

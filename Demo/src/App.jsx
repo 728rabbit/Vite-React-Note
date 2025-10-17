@@ -90,7 +90,6 @@ export default function App() {
                     <nav className='path'>
                         <div>
                             <ul>
-                                <li><Link to='/'>主頁</Link></li>
                                 {pagePath && (
                                     pagePath.map((item, index) => (
                                         <li key={ index }><FontAwesomeIcon icon="fa-angle-right" /><Link to={ item.url }>{ item.name }</Link></li>
