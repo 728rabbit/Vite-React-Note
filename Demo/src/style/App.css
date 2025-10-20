@@ -130,7 +130,7 @@ div.widget.top div.controls a.btn{
 
 div.widget.top.fixed {
     position: fixed;
-    top: 115px;
+    top: 120px;
     left: 240px;
     right: 20px;
     z-index: 2;
@@ -417,7 +417,7 @@ nav.path > div > a {
 /* main */
 main.page-body {
     position: relative;
-    padding: 115px 20px 40px 20px;
+    padding: 120px 20px 40px 20px;
     margin-left: 220px;
 }
 
@@ -427,7 +427,7 @@ main.page-body.full {
 }
 
 main.page-body.expand {
-    padding-top: 185px;
+    padding-top: 190px;
 }
 
 div.page-content {

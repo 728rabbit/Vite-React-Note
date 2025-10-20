@@ -7,6 +7,8 @@ import LeftMenu from './pages/LeftMenu.jsx';
 import { Signin as SigninPage } from './pages/Signin.jsx';
 import { Home as HomePage } from './pages/Home.jsx';
 import { Profile as ProfilePage } from './pages/Profile.jsx';
+import { ForgotPassword as ForgotPasswordPage } from './pages/ForgotPassword.jsx';
+import { ResetPassword as ResetPasswordPage } from './pages/ResetPassword.jsx';
 
 export default function App() {
     const {authnInfo, authnLoading} = useAuthn();
@@ -16,9 +18,7 @@ export default function App() {
     // Protected
     const protectedPages = {
         home: HomePage,
-        profile: ProfilePage,
-        about: About,
-        contact: Contact,
+        profile: ProfilePage
     };
 
     const protectedRoutes = useMemo(() => {
@@ -36,22 +36,6 @@ export default function App() {
     function ProtectedRoute({ children, authnInfo }) {
         if (!authnInfo) { return <Navigate to='/' replace />; }
         return children;
-    }
-
-    function About() {
-        return <h1>關於我們</h1>;
-    }
-
-    function Contact() {
-        return <h1>聯絡我們</h1>;
-    }
-
-    function ForgotPwd() {
-        return <h1>忘記密碼</h1>;
-    }
-
-    function ResetPwd() {
-        return <h1>重設密碼</h1>;
     }
 
     if(authnLoading) { 
@@ -108,8 +92,8 @@ export default function App() {
                         <Route path="/about" element={ protectedRoutes.about } />
                         <Route path="/contact" element={ protectedRoutes.contact } />
 
-                        <Route path='/forgot' element={ <ForgotPwd /> } />
-                        <Route path='/reset' element={ <ResetPwd /> } /> 
+                        <Route path='/forgot_password' element={ <ForgotPasswordPage /> } />
+                        <Route path='/reset_password' element={ <ResetPasswordPage /> } /> 
                     </Routes>
                 </main>
             </>

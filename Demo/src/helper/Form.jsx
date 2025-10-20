@@ -200,6 +200,11 @@ export function submitForm(e, transLang, callBack, extraFunc, authnToken = '') {
         tipsArea.classList.remove('error', 'success');
         tipsArea.innerHTML = '';
     }
+    const existingErrors = form.querySelectorAll('small.tips');
+    existingErrors.forEach(err => err.remove());
+
+    const existingErrorsInput = form.querySelectorAll('div.iweb-input.error');
+    existingErrorsInput.forEach(err => err.classList.remove('error'));
 
     // Show processing
     const spinner = document.createElement('div');
@@ -220,40 +225,41 @@ export function submitForm(e, transLang, callBack, extraFunc, authnToken = '') {
     })
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-        if(data.status === 200) {
-            if(typeof callBack === 'function') {
-                callBack(data);
-            }
-        }
-        else {
-            if(tipsArea && data.message) {
-                const msgDiv = document.createElement('div');
-                const closeBtn = document.createElement('a');
-                closeBtn.className = 'close';
-                closeBtn.href = 'javascript:void(0)';
-                closeBtn.textContent = '×';
-                closeBtn.addEventListener('click', () => {
-                    tipsArea.innerHTML = '';
-                    tipsArea.classList.remove('error', 'success');
-                });
-                const span = document.createElement('span');
-                span.textContent = data.message;
-                msgDiv.appendChild(closeBtn);
-                msgDiv.appendChild(span);
-                tipsArea.appendChild(msgDiv);
-                tipsArea.classList.add('error');
+        setTimeout(function(){
+            spinner.remove();
+            if(data.status === 200) {
+                if(typeof callBack === 'function') {
+                    callBack(data);
+                }
             }
             else {
-                alert(data.message);
+                if(tipsArea && data.message) {
+                    const msgDiv = document.createElement('div');
+                    const closeBtn = document.createElement('a');
+                    closeBtn.className = 'close';
+                    closeBtn.href = 'javascript:void(0)';
+                    closeBtn.textContent = '×';
+                    closeBtn.addEventListener('click', () => {
+                        tipsArea.innerHTML = '';
+                        tipsArea.classList.remove('error', 'success');
+                    });
+                    const span = document.createElement('span');
+                    span.textContent = data.message;
+                    msgDiv.appendChild(closeBtn);
+                    msgDiv.appendChild(span);
+                    tipsArea.appendChild(msgDiv);
+                    tipsArea.classList.add('error');
+                }
+                else {
+                    alert(data.message);
+                }
             }
-        }
+        }, 500);
     })
     .catch(ex => console.error(ex))
     .finally(() => {
         setTimeout(function(){
             isSubmitting = false;
-            spinner.remove();
         }, 1000);
     });
 }

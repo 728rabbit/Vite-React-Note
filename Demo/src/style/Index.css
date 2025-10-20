@@ -544,7 +544,7 @@ div.iweb-tips-message {
 div.iweb-tips-message > div {
     position: relative;
     padding: 6px 30px 6px 12px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border-radius: 4px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }

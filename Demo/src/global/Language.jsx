@@ -24,8 +24,11 @@ const language = {
         displayName: 'Display Name',
         password: 'Password',
         rememberMe: 'Remember Me?',
-        forgotPwd: 'Forgot password?',
         loginNow: 'Login',
+        forgotPwd: 'Forgot Password?',
+        forgotPwdTxt: 'Please enter your registered email address below and you will receive a one-time password reset token.',
+        resetPwd: 'Reset Password',
+        resetPwdOK: 'Your new password has taken effect, please log in again.',
    
         profile: 'Profile',
         email: 'Email',
@@ -37,6 +40,8 @@ const language = {
         btnReset: 'Reset',
         btnSave: 'Save',
         btnSubmit: 'Submit',
+        btnSend: 'Send',
+        btnBack: 'Back',
 
         dashBoard: 'DashBoard',
         themeColor: 'Theme color'
@@ -64,8 +69,11 @@ const language = {
         displayName: '顯示名稱',
         password: '密碼',
         rememberMe: '保持登入狀態？',
-        forgotPwd: '忘記密碼？',
         loginNow: '登入',
+        forgotPwd: '忘記密碼？',
+        forgotPwdTxt: '請在下面輸入您登記的電郵地址，您將收到一次性密碼重設Token。',
+        resetPwd: '重設密碼',
+        resetPwdOK: '您的新密碼已生效，請重新登入。',
 
         profile: '個人資料',
         email: '電郵',
@@ -77,6 +85,8 @@ const language = {
         btnReset: '重設',
         btnSave: '儲存',
         btnSubmit: '提交',
+        btnSend: '發送',
+        btnBack: '返回',
 
         dashBoard: '儀表板',
         themeColor: '主題色'

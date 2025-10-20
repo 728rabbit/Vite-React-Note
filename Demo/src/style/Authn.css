@@ -6,13 +6,6 @@ div.page-content.authn {
     height: 100vh;
 }
 
-div.page-content.authn h1 {
-    position: relative;
-    color: var(--icolor-primary);
-    text-align: center;
-    margin-bottom: 16px;
-}
-
 div.page-content.authn div.widget {
     max-width: 100%;
     width: 420px;
@@ -31,11 +24,22 @@ div.page-content.authn div.widget div.top-name {
     border-bottom: 2px solid var(--icolor-gray);
 }
 
-div.page-content.authn div.widget div.top-name > span {
+div.page-content.authn div.widget div.top-name > h1 {
     font-size: 2rem;
     font-weight: bold;
     color: var(--icolor-primary);
     text-transform: uppercase;
+}
+
+div.page-content.authn h2 {
+    position: relative;
+    font-size: 1.375rem;
+    color: var(--icolor-primary);
+    margin-bottom: 16px;
+}
+
+div.page-content.authn div.widget div.form {
+    white-space: normal;
 }
 
 div.page-content.authn div.iweb-row input {
