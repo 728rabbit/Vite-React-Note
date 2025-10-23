@@ -12,7 +12,7 @@ import SelectBox from '../units/SelectBox.jsx';
 
 export function PrivilegeRoleForm() {
     // Global value
-    const { setPageIndex, setPagePath, setPageExpand } = useLayout();
+    const { setPageIndex, setPagePath, setPageBack, setPageExpand } = useLayout();
     const { transLang } = useLang();
     const { tipsMessage, setTipsMessage } = useTips();
     const navigate = useNavigate();
@@ -40,6 +40,7 @@ export function PrivilegeRoleForm() {
             { name: transLang('role'), url: '/privilege/role'},
             (id && id > 0) ? { name: transLang('btnEdit'), url: '/privilege/role/edit/' + id} : { name: transLang('btnAdd'), url: '/privilege/role/add'}
         ]);
+        setPageBack('/privilege/role');
         setPageExpand(true);
     }, []);
 

@@ -14,7 +14,7 @@ import { PrivilegeRoleForm as PrivilegeRoleFormPage } from './pages/PrivilegeRol
 
 export default function App() {
     const { authnToken, authnInfo, authnLoading } = useAuthn();
-    const {pageExpand, pagePath} = useLayout(false);
+    const { pagePath, pageBack, pageExpand} = useLayout();
     const [menuVisible, setMenuVisible] = useState(false);
 
     function NotFound() {
@@ -92,8 +92,8 @@ export default function App() {
                                     ))
                                 )}
                             </ul>
-                            {(pagePath && pagePath.length >= 2) && (
-                                 <Link className="back" to={ pagePath[pagePath.length-2].url }>
+                            {pageBack && (
+                                 <Link className="back" to={pageBack}>
                                     <FontAwesomeIcon icon="fa-angle-left" />
                                     <span>返回</span>
                                 </Link>
