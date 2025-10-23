@@ -3,11 +3,12 @@ import { createContext, useContext, useState } from 'react';
 const LayoutContext = createContext();
 
 export function LayoutProvider({ children }) {
-    const [pageExpand, setPageExpand] = useState(false);
+    const [pageIndex, setPageIndex] = useState('home');
     const [pagePath, setPagePath] = useState([]);
+    const [pageExpand, setPageExpand] = useState(false);
 
     return (
-        <LayoutContext.Provider value={{ pageExpand, setPageExpand, pagePath ,setPagePath }}>
+        <LayoutContext.Provider value={{ pageIndex, setPageIndex, pagePath ,setPagePath, pageExpand, setPageExpand }}>
             {children}
         </LayoutContext.Provider>
     );

@@ -37,11 +37,17 @@ const language = {
         passwordNotMath: 'The password and repeat password do not match.',
         remark: 'Remark',
 
+        privilege: 'Privilege',
+        role: 'Role',
+
         btnReset: 'Reset',
         btnSave: 'Save',
         btnSubmit: 'Submit',
         btnSend: 'Send',
         btnBack: 'Back',
+        btnAdd: 'Add',
+        btnEdit: 'Edit',
+        btnDelete: 'Delete',
 
         dashBoard: 'DashBoard',
         themeColor: 'Theme color'
@@ -82,11 +88,17 @@ const language = {
         passwordNotMath: '密碼與重複密碼不一致。',
         remark: '備注',
 
+        privilege: '權限',
+        role: '角色',
+        
         btnReset: '重設',
         btnSave: '儲存',
         btnSubmit: '提交',
         btnSend: '發送',
         btnBack: '返回',
+        btnAdd: '新增',
+        btnEdit: '編輯',
+        btnDelete: '刪除',
 
         dashBoard: '儀表板',
         themeColor: '主題色'

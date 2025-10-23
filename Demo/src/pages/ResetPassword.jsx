@@ -23,6 +23,7 @@ export function ResetPassword() {
                     </svg>
                     <h1>{transLang('panelName')}</h1>
                 </div>
+
                 <div className="form">
                     <form id="resetPasswordForm" method="post" onSubmit={(e) => submitForm(e, transLang, function(responseData) {
                         if(responseData) {
@@ -52,22 +53,29 @@ export function ResetPassword() {
                         return true;
                     })}>
                         <TipsBox type={tipsMessage.type ?? ''} text={tipsMessage.text ?? ''} />
-                        <div><h2>{transLang('resetPwd')}</h2></div>
+
+                        <div><h2>{ transLang('resetPwd') }</h2></div>
+
                         <div><TextBox name="action_index" value="resetpwd" extra={{ type: 'hidden'}}/></div>
+
                         <div className="iweb-row">
                             <TextBox name="token" value="" extra={{ alias: 'Token', validation: 'required'}}/>
                         </div>
+
                         <div className="iweb-row">
                             <TextBox name="password" value="" extra={{ type: 'password', alias: transLang('password'), validation: 'required|password'}}/>
                         </div>
+
                         <div className="iweb-row">
                             <TextBox name="repeat_password" value="" extra={{ type: 'password', alias: transLang('repeatPassword'), validation: 'required|password'}}/>
                         </div>
+
                         <div className="iweb-row" style={{ textAlign: 'right' }}>
                             <Link to="/"><u>{transLang('btnBack')}</u></Link>
                         </div>
+
                         <div className="iweb-row last">
-                            <button type="submit" className="btn full">{transLang('btnSubmit')}</button>
+                            <button type="submit" className="btn full">{ transLang('btnSubmit') }</button>
                         </div>
                     </form>
                 </div>

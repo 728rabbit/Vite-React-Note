@@ -17,8 +17,8 @@ export function AuthnProvider({ children }) {
         }
 
         if(!authnInfo) {
+            setAuthnLoading(true);
             const fetchAuthnInfo = async () => {
-                setAuthnLoading(true);
                 try {
                     const formData = new FormData();
                     formData.append('action_index', 'getprofile');

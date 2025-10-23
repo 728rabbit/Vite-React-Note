@@ -23,6 +23,7 @@ export function ForgotPassword() {
                     </svg>
                     <h1>{transLang('panelName')}</h1>
                 </div>
+                
                 <div className="form">
                     <form id="forgotPasswordForm" method="post" onSubmit={(e) => submitForm(e, transLang, function(responseData) {
                         if(responseData) {
@@ -30,14 +31,19 @@ export function ForgotPassword() {
                         }
                     })}>
                         <TipsBox type={tipsMessage.type ?? ''} text={tipsMessage.text ?? ''} />
+
                         <div><h2>{transLang('forgotPwd')}</h2></div>
+
                         <div><TextBox name="action_index" value="forgotpwd" extra={{ type: 'hidden'}}/></div>
+
                         <div className="iweb-row">
                             <TextBox name="email" value="" extra={{ alias: transLang('forgotPwdTxt'), validation: 'required|email'}}/>
                         </div>
+
                         <div className="iweb-row" style={{ textAlign: 'right' }}>
                             <Link to="/"><u>{transLang('btnBack')}</u></Link>
                         </div>
+
                         <div className="iweb-row last">
                             <button type="submit" className="btn full">{transLang('btnSend')}</button>
                         </div>

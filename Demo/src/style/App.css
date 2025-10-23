@@ -115,7 +115,7 @@ div.widget.top div.filter {
 }
 
 div.widget.top div.filter table td {
-    padding-right: 4px;
+    padding-right: 6px;
 }
 
 div.widget.top div.controls {
@@ -125,7 +125,7 @@ div.widget.top div.controls {
 
 div.widget.top div.controls button.btn,
 div.widget.top div.controls a.btn{
-    margin-left: 8px;
+    margin-left: 6px;
 }
 
 div.widget.top.fixed {
@@ -485,42 +485,43 @@ table.list thead tr th span,
 table.list tbody tr td span {
     display: inline-block;
     line-height: 18px;
-    vertical-align: baseline;
+    vertical-align: middle;
 }
 
 table.list thead tr th a,
 table.list tbody tr td a {
     display: inline-block;
-    vertical-align: baseline;
+    vertical-align: middle;
 }
 
-table.list tbody tr td i {
+table.list tbody tr td svg {
     font-size: 14px;
 }
 
-table.list tbody tr td i.fa-angle-double-right {
+table.list tbody tr td svg.fa-angle-double-right {
     color: var(--icolor-blue);
 }
 
-table.list tbody tr td i.fa-check-circle {
+table.list tbody tr td svg.fa-check-circle {
     font-size: 18px;
     color: var(--icolor-green);
 }
 
-table.list tbody tr td i.fa-ban {
+table.list tbody tr td svg.fa-ban {
     font-size: 18px;
     color: var(--icolor-lightred);
 }
 
-table.list tbody tr td i.fa-book,
-table.list tbody tr td i.fa-pencil {
+table.list tbody tr td svg.fa-book,
+table.list tbody tr td svg.fa-pencil {
     color: var(--icolor-darkblue);
 }
 
 table.list thead tr th div.sortable {
     display: inline-block;
-    width: 10px;
+    width: 12px;
     height: 18px;
+    margin-left: 4px;
     vertical-align: middle;
     overflow: hidden;
 }
@@ -535,7 +536,8 @@ table.list thead tr th div.sortable > div > a {
     display: inline-block;
     top: -1px;
     left: 0px;
-    width: 10px;
+    width: 18px;
+    height: 14px;
     text-align: center;
     vertical-align: middle;
     opacity: 0.5;
@@ -550,9 +552,9 @@ table.list thead tr th div.sortable > div > a.selected {
     opacity: 1;
 }
 
-table.list thead tr th div.sortable > div > a > i{
+table.list thead tr th div.sortable > div > a > svg {
     display: block;
-    font-size: 12px;
+    width: 12px;
 }
 
 table.list tfoot tr th button.btn,

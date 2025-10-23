@@ -25,6 +25,7 @@ export function Signin() {
                     </svg>
                     <h1>{transLang('panelName')}</h1>
                 </div>
+
                 <div className="form">
                     <form id="loginForm" method="post" onSubmit={(e) => submitForm(e, transLang, function(responseData) {
                         if(responseData) {
@@ -34,12 +35,15 @@ export function Signin() {
                         <TipsBox type={tipsMessage.type ?? ''} text={tipsMessage.text ?? ''} />
 
                         <div><TextBox name="action_index" value="login" extra={{ type: 'hidden'}}/></div>
+
                         <div className="iweb-row">
-                            <TextBox name="username" value="" extra={{ alias: transLang('userName'), validation: 'required'}}/>
+                            <TextBox name="username" extra={{ alias: transLang('userName'), validation: 'required'}}/>
                         </div>
+
                         <div className="iweb-row">
-                            <TextBox name="password" value="" extra={{ type: 'password', alias: transLang('password'), validation: 'required'}}/>
+                            <TextBox name="password" extra={{ type: 'password', alias: transLang('password'), validation: 'required'}}/>
                         </div>
+
                         <div className="iweb-row">
                             <table width="100%">
                                 <tbody>
@@ -47,13 +51,14 @@ export function Signin() {
                                         <td>
                                              <SelectBox name="remember_me" options={[{ value: '1', label: transLang('rememberMe') }]} extra={{ type: 'checkbox' }}/>
                                         </td>
-                                        <td style={{ textAlign: 'right' }}><Link to="/forgot_password"><u>{transLang('forgotPwd')}</u></Link></td>
+                                        <td style={{ textAlign: 'right' }}><Link to="/forgot_password"><u>{ transLang('forgotPwd') }</u></Link></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
                         <div className="iweb-row last">
-                            <button type="submit" className="btn full">{transLang('loginNow')}</button>
+                            <button type="submit" className="btn full">{ transLang('loginNow') }</button>
                         </div>
                     </form>
                 </div>

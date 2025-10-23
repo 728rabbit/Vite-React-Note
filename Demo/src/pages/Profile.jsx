@@ -10,7 +10,7 @@ import TextBox from "../units/TextBox";
 
 export function Profile() {
     // Global value
-    const { setPageExpand, setPagePath } = useLayout();
+    const { setPageIndex, setPagePath, setPageExpand } = useLayout();
     const { transLang } = useLang();
     const { tipsMessage, setTipsMessage } = useTips();
     const { authnToken, authnInfo, renewAuthnInfo } = useAuthn();
@@ -22,13 +22,15 @@ export function Profile() {
         email: authnInfo.email ?? '',
         password: '',
         repeat_password: '',
+        remark: ''
     }), [authnInfo]);
     const [formValues, setFormValues] = useState(defaultFormValues);
 
     // Init
     useEffect(() => {
-        setPageExpand(true);
+        setPageIndex('profile');
         setPagePath([{ name: transLang('profile'), url: '/profile'}]);
+        setPageExpand(true);
     }, []);
 
     // View
@@ -69,9 +71,7 @@ export function Profile() {
             }, authnToken)}>
                 <div className="widget thin top fixed">
                     <div className="controls">
-                        <button type="button" className="btn btn-red" onClick={() => {
-                            setFormValues(defaultFormValues);
-                        }}>
+                        <button type="button" className="btn btn-red" onClick={() => { setFormValues(defaultFormValues); }}>
                             <FontAwesomeIcon icon="fa-undo"/><span>{transLang('btnReset')}</span>
                         </button>
                         <button type="submit" className="btn btn-green">
@@ -89,14 +89,20 @@ export function Profile() {
                     <div className="iweb-row">
                         <div className="iweb-grid">
                             <div className="column-2">
-                                <TextBox name="username" value={ formValues.username }
-                                onChange={ val => setFormValues(prev => ({ ...prev, username: val })) }
-                                extra={{ alias: transLang('userName'), isDisabled: true}}/>
+                                <TextBox 
+                                name="username" 
+                                value={ formValues.username }
+                                extra={{ alias: transLang('userName'), isDisabled: true}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, username: val })) }
+                               />
                             </div>
                             <div className="column-2">
-                                <TextBox name="display_name" value={ formValues.display_name } 
-                                onChange={ val => setFormValues(prev => ({ ...prev, display_name: val })) }
-                                extra={{ alias: transLang('displayName'), validation: 'required'}}/>
+                                <TextBox 
+                                name="display_name" 
+                                value={ formValues.display_name } 
+                                extra={{ alias: transLang('displayName'), validation: 'required'}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, display_name: val })) }
+                                />
                             </div>
                         </div>
                     </div>
@@ -104,33 +110,50 @@ export function Profile() {
                     <div className="iweb-row">
                         <div className="iweb-grid">
                             <div className="column-2">
-                                <TextBox name="telephone" value={ formValues.telephone } 
-                                onChange={ val => setFormValues(prev => ({ ...prev, telephone: val })) }
-                                extra={{ alias: transLang('telephone'), validation: 'number'}}/>
+                                <TextBox 
+                                name="telephone" 
+                                value={ formValues.telephone } 
+                                extra={{ alias: transLang('telephone'), validation: 'number'}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, telephone: val })) }
+                                />
                             </div>
                             <div className="column-2">
-                                <TextBox name="email" value={ formValues.email } 
-                                onChange={ val => setFormValues(prev => ({ ...prev, email: val })) }
-                                extra={{ alias: transLang('email'), validation: 'email'}}/>
+                                <TextBox 
+                                name="email" 
+                                value={ formValues.email } 
+                                extra={{ alias: transLang('email'), validation: 'email'}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, email: val })) }
+                                />
                             </div>
                         </div>
                     </div>
                     <div className="iweb-row">
                         <div className="iweb-grid">
                             <div className="column-2">
-                                <TextBox name="password" value={ formValues.password } 
-                                onChange={ val => setFormValues(prev => ({ ...prev, password: val })) }
-                                extra={{ type: 'password', alias: transLang('password'), validation: 'password'}}/>
+                                <TextBox 
+                                name="password" 
+                                value={ formValues.password } 
+                                extra={{ type: 'password', alias: transLang('password'), validation: 'password'}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, password: val })) }
+                                />
                             </div>
                             <div className="column-2">
-                                <TextBox name="repeat_password" value={ formValues.repeat_password } 
-                                onChange={ val => setFormValues(prev => ({ ...prev, repeat_password: val })) }
-                                extra={{ type: 'password', alias: transLang('repeatPassword'), validation: 'password'}}/>
+                                <TextBox 
+                                name="repeat_password" 
+                                value={ formValues.repeat_password } 
+                                extra={{ type: 'password', alias: transLang('repeatPassword'), validation: 'password'}}
+                                onChange={ (val) => setFormValues(prev => ({ ...prev, repeat_password: val })) }
+                                />
                             </div>
                         </div>
                     </div>
                     <div className="iweb-row">
-                        <TextBox name="remark" value="" extra={{ type: 'textarea', alias: transLang('remark') }}/> 
+                        <TextBox 
+                        name="remark" 
+                        value={ formValues.remark }  
+                        extra={{ type: 'textarea', alias: transLang('remark') }}
+                        onChange={ (val) => setFormValues(prev => ({ ...prev, remark: val })) }
+                        /> 
                     </div>
                 </div>
             </form>

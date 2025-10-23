@@ -9,16 +9,28 @@ import { Home as HomePage } from './pages/Home.jsx';
 import { Profile as ProfilePage } from './pages/Profile.jsx';
 import { ForgotPassword as ForgotPasswordPage } from './pages/ForgotPassword.jsx';
 import { ResetPassword as ResetPasswordPage } from './pages/ResetPassword.jsx';
+import { PrivilegeRole as PrivilegeRolePage } from './pages/PrivilegeRole.jsx';
+import { PrivilegeRoleForm as PrivilegeRoleFormPage } from './pages/PrivilegeRoleForm.jsx';
 
 export default function App() {
-    const {authnInfo, authnLoading} = useAuthn();
-    const [menuVisible, setMenuVisible] = useState(false);
+    const { authnToken, authnInfo, authnLoading } = useAuthn();
     const {pageExpand, pagePath} = useLayout(false);
+    const [menuVisible, setMenuVisible] = useState(false);
+
+    function NotFound() {
+        return (
+            <div>
+                <h2 style={{textAlign:'center'}}>Error 404: Page Not Found.<br/><small>錯誤 404：找不到此頁面。</small></h2>
+            </div>
+        );
+    }
 
     // Protected
     const protectedPages = {
         home: HomePage,
-        profile: ProfilePage
+        profile: ProfilePage,
+        privilege_role: PrivilegeRolePage,
+        privilege_role_form: PrivilegeRoleFormPage
     };
 
     const protectedRoutes = useMemo(() => {
@@ -34,16 +46,16 @@ export default function App() {
     }, [authnInfo]);
 
     function ProtectedRoute({ children, authnInfo }) {
-        if (!authnInfo) { return <Navigate to='/' replace />; }
+        if (!authnInfo) { return <Navigate to="/" replace />; }
         return children;
     }
 
     if(authnLoading) { 
         return (
             <>
-                <div className='page-loading'>
-                    <div className='spinner'></div>
-                    <div className='tips'>Loading, please wait...</div>
+                <div className="page-loading">
+                    <div className="spinner"></div>
+                    <div className="tips">Loading, please wait...</div>
                 </div>
             </>
         ); 
@@ -53,25 +65,25 @@ export default function App() {
             <>
                 {authnInfo && (
                 <>
-                    <header className='page-header'>
-                        <div className='logo'>
-                            <Link to='#'>
-                                <svg width='48' height='48' viewBox='0 0 48 48' fill='none'>
-                                    <circle cx='24' cy='24' r='22' fill='#525896'/>
-                                    <path d='M16 32L24 14L32 32H28L24 24L20 32H16Z' fill='white'/>
+                    <header className="page-header">
+                        <div className="logo">
+                            <Link to="#">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                    <circle cx="24" cy="24" r="22" fill="#525896"/>
+                                    <path d="M16 32L24 14L32 32H28L24 24L20 32H16Z" fill="white"/>
                                 </svg>
                                 <span>AdminHub<br/><small>系統管理中心</small></span>
                             </Link>
                         </div>
-                        <div className='open'>
-                            <Link onClick={ () => setMenuVisible(!menuVisible) }><FontAwesomeIcon icon='fa-indent' className='icon-white'/></Link>
+                        <div className="open">
+                            <Link onClick={ () => setMenuVisible(!menuVisible) }><FontAwesomeIcon icon="fa-indent" className="icon-white"/></Link>
                         </div>
-                        <div className='welcome'>
-                            <Link to='/profile'>Hi, <u>{ authnInfo ? authnInfo.display_name: 'Guest' }</u></Link>
+                        <div className="welcome">
+                            <Link to="/profile">Hi, <u>{ authnInfo ? authnInfo.display_name: 'Guest' }</u></Link>
                         </div>
                     </header>
                     <LeftMenu isVisible={menuVisible} setIsVisible={setMenuVisible}/>
-                    <nav className='path'>
+                    <nav className="path">
                         <div>
                             <ul>
                                 {pagePath && (
@@ -80,20 +92,28 @@ export default function App() {
                                     ))
                                 )}
                             </ul>
+                            {(pagePath && pagePath.length >= 2) && (
+                                 <Link className="back" to={ pagePath[pagePath.length-2].url }>
+                                    <FontAwesomeIcon icon="fa-angle-left" />
+                                    <span>返回</span>
+                                </Link>
+                            )}
                         </div>
                     </nav>
                 </>
                 )}
-                <main className={`page-body${!authnInfo ? ' full' : (pageExpand ? ' expand': '')}`}>
+                <main className={`page-body${ !authnInfo ? ' full' : (pageExpand ? ' expand': '') }`}>
                     <Routes>
-                        <Route path='/' element={ authnInfo ? protectedRoutes.home : <SigninPage /> }  />
-
+                        <Route path="/" element={ authnToken ? protectedRoutes.home : <SigninPage /> }  />
                         <Route path="/profile" element={ protectedRoutes.profile } />
-                        <Route path="/about" element={ protectedRoutes.about } />
-                        <Route path="/contact" element={ protectedRoutes.contact } />
+                        <Route path="/forgot_password" element={ <ForgotPasswordPage /> } />
+                        <Route path="/reset_password" element={ <ResetPasswordPage /> } /> 
 
-                        <Route path='/forgot_password' element={ <ForgotPasswordPage /> } />
-                        <Route path='/reset_password' element={ <ResetPasswordPage /> } /> 
+                        <Route path="/privilege/role" element={ protectedRoutes.privilege_role } />
+                        <Route path="/privilege/role/add" element={ protectedRoutes.privilege_role_form } />
+                        <Route path="/privilege/role/edit/:id" element={ protectedRoutes.privilege_role_form } />
+                        
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </main>
             </>

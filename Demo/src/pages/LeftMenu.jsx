@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTips } from '../global/Tips.jsx';
 import { useAuthn } from '../global/Authn.jsx';
+import { useLayout } from '../global/Layout.jsx';
 
 export default function LeftMenu({ isVisible = true, setIsVisible }) {
     const { renewAuthnToken } = useAuthn();
     const { setTipsMessage } = useTips();
-    const [openIndex, setOpenIndex] = useState('home');
+    const { pageIndex, setPageIndex} = useLayout();
     const leftMenu = 
     [
         {
@@ -31,7 +32,7 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
                 {
                     name: '角色',
                     icon: 'fa-lock',
-                    url: '#'
+                    url: '/privilege/role'
                 }
             ]
         },
@@ -62,7 +63,7 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
                         renewAuthnToken('');
                     }
                     else {
-                        setOpenIndex(item.index); 
+                        setPageIndex(item.index); 
                         setIsVisible(false);
                     }
                     setTipsMessage({ type: 'none', txt: '' });
@@ -71,11 +72,11 @@ export default function LeftMenu({ isVisible = true, setIsVisible }) {
                     console.error(error);
                 }
               }} target={ (item.target ?? '_self') }
-              className={([((openIndex == item.index) ? 'current': ''), ((item.child) ? 'parent': '')].filter(Boolean).join(' ').trim())}>
+              className={([((pageIndex == item.index) ? 'current': ''), ((item.child) ? 'parent': '')].filter(Boolean).join(' ').trim())}>
               <FontAwesomeIcon icon={ item.icon }/><span>{ item.name }</span>
               </Link>
               { item.child && (
-                <ol className={((openIndex == item.index) ? 'show': '')}>
+                <ol className={((pageIndex == item.index) ? 'show': '')}>
                   { item.child.map((sub_item, sub_index) => (
                     <li key={ sub_index }>
                         <Link to={ sub_item.url } onClick={() => { setTipsMessage({ type: 'none', text: '' }); }}><FontAwesomeIcon icon={ sub_item.icon }/><span>{ sub_item.name }</span></Link>

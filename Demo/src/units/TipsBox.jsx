@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export function TipsBox({ type = 'default', text = ''}) {
+export function TipsBox({ type = 'default', text = '' }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {

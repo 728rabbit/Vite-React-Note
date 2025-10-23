@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLayout } from '../global/Layout.jsx';
 import { useLang } from '../global/Language.jsx';
 import { useTips } from '../global/Tips.jsx';
+import { submitForm } from '../helper/Form.jsx';
+import TextBox from '../units/TextBox';
 
 export function Home() {
     // Global value
@@ -14,6 +16,7 @@ export function Home() {
         setPageExpand(false);
         setPagePath([{ name: transLang('dashBoard'), url: '/'}]);
     }, []);
+
 
     return (
         <>
