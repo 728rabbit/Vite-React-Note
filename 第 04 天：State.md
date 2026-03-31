@@ -95,3 +95,42 @@
 
 
 現在你就有一個完整的「加減計數器」！
+
+複合參數使用 typescript, 則需要定明類型， 使用類似以下格式修改
+
+useState_func_name (prev => ({ ...prev, 參數名稱: prev.參數名稱:+ num }));
+
+    import { useState } from 'react'
+    import './App.css'
+    import Hello from './components/Hello'
+    
+    function App() {
+      const [mixed, setMixed] = useState({'count': 0, text: ''});
+    
+      const setCount = (num: number) => {
+        setMixed(prev => ({ ...prev, count: prev.count + num }));
+      }
+    
+      const setText = (str: string) => {
+        setMixed(prev => ({ ...prev, text: str }));
+      }
+    
+      return (
+        <>
+          <h1>Hello Vite + React!</h1>
+          <button onClick={() => setCount(1)}>{mixed.count}</button>
+          
+          <Hello name="petter"></Hello>
+    
+          <input
+            type="text"
+            placeholder="輸入文字..."
+            value={mixed.text}
+            onChange={(e) => setText(e.target.value)} // 監聽輸入
+          />
+          <p>你輸入的是：{mixed.text}</p>
+        </>
+      )
+    }
+    
+    export default App
