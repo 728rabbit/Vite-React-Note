@@ -24,7 +24,8 @@ div.iweby-input input[type="time"],
 div.iweby-input input[type="color"],
 div.iweby-input input[type="tel"],
 div.iweby-input input[type="email"],
-div.iweby-input input[type="number"] {
+div.iweby-input input[type="number"],
+div.iweby-input input[type="file"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -59,6 +60,10 @@ div.iweby-input input[type="text"].colorcode {
     border-bottom-left-radius: 0px;
 }
 
+div.iweby-input input[type="file"] {
+    padding: 4px;
+}
+
 div.iweby-input textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -85,6 +90,7 @@ div.iweby-input input[type="color"].error,
 div.iweby-input input[type="tel"].error,
 div.iweby-input input[type="email"].error,
 div.iweby-input input[type="number"].error,
+div.iweby-input input[type="file"].error,
 div.iweby-input textarea.error {
     border-color: var(--icolor-lightred) !important;
 }

@@ -75,7 +75,7 @@ import './InputBox.css';
 interface InputBoxProps {
     fieldLabel?: string;
     fieldName: string;
-    fieldType?: 'text' | 'password' | 'datetime-local' | 'date' | 'time' | 'color' | 'tel' | 'email' | 'number' | 'textarea' | 'editor';
+    fieldType?: 'text' | 'password' | 'datetime-local' | 'date' | 'time' | 'color' | 'tel' | 'email' | 'number' | 'textarea' | 'editor' | 'file';
     fieldId?: string;
     value?: string;
     defaultValue?: string;
@@ -83,6 +83,7 @@ interface InputBoxProps {
     placeholder?: string;
     disabled?: boolean;
     validation?: string;
+    multiple?: boolean;
 }
 
 // Extract validation rules as constants to avoid repeated creation

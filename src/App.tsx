@@ -7,7 +7,7 @@ export default function App() {
         username: '',
         email: '',
         password: '',
-        remak: ''
+        remark: ''
     });
     
     // ✅ 儲存每個欄位的驗證狀態
@@ -116,14 +116,24 @@ export default function App() {
                 />
             </div>
 
+            <div className="iweby-row">
+                <InputBox
+                    fieldLabel='附件'
+                    fieldName="file"
+                    fieldType="file"
+                    multiple
+                    onChange={handleFieldChange('file')}
+                />
+            </div>
+
 
             <div className="iweby-row">
                 <InputBox
                     fieldLabel='備注'
-                    fieldName="remak"
+                    fieldName="remark"
                     fieldType="textarea"
-                    value={formData.remak}
-                    onChange={handleFieldChange('remak')}
+                    value={formData.remark}
+                    onChange={handleFieldChange('remark')}
                 />
             </div>
             
