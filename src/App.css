@@ -1,0 +1,130 @@
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansTC';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./fonts/noto-sans-chinese-traditional-latin-300.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansTC';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/noto-sans-chinese-traditional-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansTC';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./fonts/noto-sans-chinese-traditional-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansSC';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./fonts/noto-sans-chinese-simplified-latin-300.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansSC';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/noto-sans-chinese-simplified-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'NotoSansSC';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./fonts/noto-sans-chinese-simplified-latin-700.woff2') format('woff2');
+}
+
+:root {
+    --background-color: #fff8f2;
+    --icolor-primary: #525896;
+    --icolor-darkgreen: #2489a2;
+    --icolor-green: #9dd864;
+    --icolor-darkred: #d73d32;
+    --icolor-red: #f93a37;
+    --icolor-darkyellow: #fda525;
+    --icolor-yellow: #ffd700;
+    --icolor-darkblue: #325096;
+    --icolor-blue: #2175c3;
+    --icolor-darkgray: #6a6a6a;
+    --icolor-gray: #dddddd;
+    --icolor-white: #ffffff;
+    --icolor-black: #222222;
+    --icolor-lightgreen: #e1f7d2;
+    --icolor-lightred: #ffb6c1;
+    --icolor-lightyellow: #ffffc5;
+    --icolor-lightblue: #90d5ff;
+    --icolor-lightgray: #f6f6f6;
+    --icolor-lightpink: #ffecec;
+    --iscrollbar-width: 0px;
+}
+
+* {
+    box-sizing: border-box;
+    outline: none;
+    padding: 0px;
+    margin: 0px;
+    word-wrap: break-word;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-text-size-adjust: 100%;
+}
+
+*:after,
+*:before {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.clearboth {
+    position: relative !important;
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    height: 0px !important;
+    padding: 0px !important;
+    margin: 0px !important;
+    overflow: hidden !important;
+}
+
+html { 
+    font-size: 1em;
+}
+
+html.small-font {
+    font-size: 0.875em;
+}
+
+html.large-font {
+    font-size: 1.25em;
+}
+
+body {
+    font-family: 'NotoSansTC', 'NotoSansSC', 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'Heiti TC', 'Arial', sans-serif;
+    font-size: 1rem;
+    color: var(--icolor-black);
+    min-width: 360px;
+    width: 100%;
+}
+
+
+div.iweby-row {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+div.iweby-row.last {
+    margin-bottom: 0px;
+}
