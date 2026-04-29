@@ -98,10 +98,10 @@ const VALIDATION_RULES = {
     gt0: (value: string) => isNaN(Number(value)) || Number(value) <= 0,
 };
 
-// Error message mapping
+// Error message mapping - English
 const ERROR_MESSAGES_EN: Record<string, string> = {
     required: 'Please fill out this field correctly.',
-    password: 'Password must contain at least 6 characters, including upper/lowercase and numbers (e.g. Abc123).',
+    password: 'Password must contain at least 6 characters, including uppercase, lowercase and numbers (e.g. Abc123).',
     email: 'Invalid email address format.',
     date: 'Invalid date format.',
     time: 'Invalid time format.',
@@ -110,6 +110,7 @@ const ERROR_MESSAGES_EN: Record<string, string> = {
     gt0: 'Value must be greater than 0.',
 };
 
+// Error message mapping - Traditional Chinese
 const ERROR_MESSAGES_ZH: Record<string, string> = {
     required: '請正確填寫此欄位。',
     password: '密碼必須包含至少 6 個字元，包括大寫字母、小寫字母和數字（例如：Abc123）。',
@@ -130,7 +131,7 @@ const getErrorMessage = (rule: string): string => {
         const cookieMatch = document.cookie.match(/app_default_language=([^;]+)/);
         langPreference = cookieMatch ? cookieMatch[1] : null;
     }
-    const isEnglish = (langPreference !== 'zh');
+    const isEnglish = langPreference !== 'zh';
     const messages = isEnglish ? ERROR_MESSAGES_EN : ERROR_MESSAGES_ZH;
     return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
 };
@@ -168,7 +169,7 @@ const isValid = (value: string, validation?: string): string => {
     return '';
 };
 
-// Extract password toggle button SVG as constant
+// Extract password toggle button SVG as constants
 const EyeIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="currentColor"/>
@@ -217,17 +218,16 @@ export default function InputBox({
     // Validation function - use ref to ensure latest validation is used
     const validateValue = useCallback((value: string) => {
         return isValid(value, validationRef.current);
-    }, []); // Empty dependency, because changes to validationRef.current do not require recreating the function.
+    }, []);
 
     // Validation result
     const validationResult = useMemo(() => {
         return validateValue(currentValue);
     }, [currentValue, validateValue]);
 
-    // Handle change
+    // Handle change for text inputs
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const newValue = e.target.value;
-
         const result = validateValue(newValue);
 
         if (!isControlled) {
@@ -245,20 +245,21 @@ export default function InputBox({
         onChange?.(newValue, result === '');
     }, [isControlled, validateValue, onChange, isTouched, forceDisplayError]);
 
-    const handleColorChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Handle color input specifically
+    const handleColorChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         let newValue = e.target.value;
 
-        // Auto-completion #
+        // Auto-complete # prefix
         if (newValue && !newValue.startsWith('#')) {
             newValue = '#' + newValue;
         }
         
-        // Length is limited to 7 (including #)
+        // Limit length to 7 characters (including #)
         if (newValue.length > 7) {
             newValue = newValue.slice(0, 7);
         }
         
-        // Only # and 0-9, A-F, a-f are allowed
+        // Only allow # and valid hex characters
         const isValidColor = /^#?[0-9A-Fa-f]*$/.test(newValue);
         if (!isValidColor) return;
 
@@ -293,7 +294,7 @@ export default function InputBox({
 
     const showError = (isTouched || forceDisplayError) && validationResult;
     
-    // Merge shared props
+    // Merge shared props for input/textarea elements
     const sharedProps = {
         id: fieldId,
         name: fieldName,
@@ -306,6 +307,7 @@ export default function InputBox({
         ...props,
     };
 
+    // Memoize password toggle button to prevent unnecessary re-renders
     const PasswordToggleButton = useMemo(() => (
         <button
             type="button"
@@ -349,7 +351,14 @@ export default function InputBox({
                             type={fieldType === 'password' ? (passwordMode ? 'password' : 'text') : fieldType}
                         />
                         {fieldType === 'color' && (
-                            <input type="text" className="colorcode" id={`color_${fieldId}`} value={!currentValue ? '#000000': currentValue.toLowerCase()} onChange={handleColorChange} maxLength={7}/>
+                            <input 
+                                type="text" 
+                                className="colorcode" 
+                                id={`color_${fieldId}`} 
+                                value={!currentValue ? '#000000' : currentValue.toLowerCase()} 
+                                onChange={handleColorChange} 
+                                maxLength={7}
+                            />
                         )}
                         {fieldType === 'password' && PasswordToggleButton}
                     </>
