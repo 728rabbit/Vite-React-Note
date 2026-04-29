@@ -1,0 +1,24 @@
+div.lang-switcher {
+    position: relative;
+}
+
+div.lang-switcher > button {
+    background: var(--icolor-gray);
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 0px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+div.lang-switcher > button:nth-child(1) {
+    margin-left: 0px;
+}
+
+div.lang-switcher > button.current {
+    background: var(--icolor-primary);
+    color: var(--icolor-white);
+}

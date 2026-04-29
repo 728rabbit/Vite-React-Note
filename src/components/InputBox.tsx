@@ -122,21 +122,27 @@ const ERROR_MESSAGES_ZH: Record<string, string> = {
     gt0: '數值必須大於 0。',
 };
 
-const getErrorMessage = (rule: string): string => {
+const getErrorMessage = (rule: string, langPreference?: string): string => {
+    const isEnglish = ((langPreference || 'en') !== 'zh');
+    const messages = isEnglish ? ERROR_MESSAGES_EN : ERROR_MESSAGES_ZH;
+    return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
+};
+
+const getlangPreference = (): string => {
     // Read from localStorage first, then from cookies if not found. English is the default language.
-    // How to set language preferences: 
-    // localStorage.setItem('app_default_language', 'zh');
+    // 1. How to set language preferences: 
+    //    localStorage.setItem('app_default_language', 'zh');
+    // 2. Trigger re-render:
+    //    window.dispatchEvent(new CustomEvent('inputbox:languageChange'));
     let langPreference = localStorage.getItem('app_default_language');
     if (!langPreference) {
         const cookieMatch = document.cookie.match(/app_default_language=([^;]+)/);
         langPreference = cookieMatch ? cookieMatch[1] : null;
     }
-    const isEnglish = langPreference !== 'zh';
-    const messages = isEnglish ? ERROR_MESSAGES_EN : ERROR_MESSAGES_ZH;
-    return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
-};
+    return (langPreference ?? 'en');
+}
 
-const isValid = (value: string, validation?: string): string => {
+const isValid = (value: string, validation?: string, langPreference?: string): string => {
     if (!validation) return '';
 
     const rules = validation.split('|');
@@ -149,7 +155,7 @@ const isValid = (value: string, validation?: string): string => {
         // Built-in rules
         if (rule in VALIDATION_RULES) {
             if (VALIDATION_RULES[rule as keyof typeof VALIDATION_RULES](value)) {
-                return getErrorMessage(rule);
+                return getErrorMessage(rule, (langPreference || 'en'));
             }
             continue;
         }
@@ -198,6 +204,8 @@ export default function InputBox({
     validation,
     ...props
 }: InputBoxProps) {
+    const [langPreference, setLangPreference] = useState(() => getlangPreference());
+
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [passwordMode, setPasswordMode] = useState(true);
     const [isTouched, setIsTouched] = useState(false);
@@ -217,13 +225,13 @@ export default function InputBox({
 
     // Validation function - use ref to ensure latest validation is used
     const validateValue = useCallback((value: string) => {
-        return isValid(value, validationRef.current);
-    }, []);
+        return isValid(value, validationRef.current, langPreference);
+    }, [langPreference]);
 
     // Validation result
     const validationResult = useMemo(() => {
         return validateValue(currentValue);
-    }, [currentValue, validateValue]);
+    }, [currentValue, validateValue, langPreference]);
 
     // Handle change for text inputs
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -285,11 +293,18 @@ export default function InputBox({
         setPasswordMode(prev => !prev);
     }, []);
 
-    // Listen for global force validation event
+    // Listen for global force validation event and language change event
     useEffect(() => {
         const handleForceValidate = () => setForceDisplayError(true);
+        const handleLanguageChange = () => setLangPreference(getlangPreference());
+
         window.addEventListener('inputbox:forceValidate', handleForceValidate);
-        return () => window.removeEventListener('inputbox:forceValidate', handleForceValidate);
+        window.addEventListener('inputbox:languageChange', handleLanguageChange);
+        
+        return () => {
+            window.removeEventListener('inputbox:forceValidate', handleForceValidate);
+            window.removeEventListener('inputbox:languageChange', handleLanguageChange);
+        };
     }, []);
 
     const showError = (isTouched || forceDisplayError) && validationResult;
