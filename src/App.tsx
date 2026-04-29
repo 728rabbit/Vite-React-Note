@@ -1,8 +1,13 @@
 import { useState, useCallback } from 'react';
-import './App.css';
 import InputBox from './components/InputBox';
+import LangSwitcher from './components/LangSwitcher';
+import { useI18n } from './I18n';
+import './App.css';
+
 
 export default function App() {
+    const { plang } = useI18n();
+
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -45,47 +50,51 @@ export default function App() {
         }
     }, [canSubmit, formData]);
 
+    
+     
+
     return (
         <>
+            <div><LangSwitcher/></div>
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='用戶名'
+                    fieldLabel={plang('username')}
                     fieldName="username" 
                     fieldType="text" 
                     value={formData.username} 
                     onChange={handleFieldChange('username')} 
-                    placeholder="請輸入用戶名" 
+                    placeholder={plang('username_tips')} 
                     validation="required"
                 />
             </div>
             
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='電郵'
+                    fieldLabel={plang('email_address')}
                     fieldName="email" 
                     fieldType="email" 
                     value={formData.email} 
                     onChange={handleFieldChange('email')} 
-                    placeholder="your@email.com" 
+                    placeholder={plang('email_address_tips')}
                     validation="required|email"
                 />
             </div>
 
             <div className="iweby-row">
                 <InputBox
-                    fieldLabel='密碼'
+                    fieldLabel={plang('password')}
                     fieldName="password"
                     fieldType="password"
                     value={formData.password}
                     onChange={handleFieldChange('password')}
-                    placeholder="請輸入密碼"
+                    placeholder={plang('password_tips')}
                     validation="required|password"
                 />
             </div>
 
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='日期+時間'
+                    fieldLabel={plang('datetime')}
                     fieldName="local" 
                     fieldType="datetime-local"
                 />
@@ -93,15 +102,16 @@ export default function App() {
 
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='日期'
+                    fieldLabel={plang('date')}
                     fieldName="date" 
                     fieldType="date"
+                    validation="required|date"
                 />
             </div>
 
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='時間'
+                    fieldLabel={plang('time')}
                     fieldName="time" 
                     fieldType="time"
                 />
@@ -109,7 +119,7 @@ export default function App() {
 
             <div className="iweby-row">
                 <InputBox 
-                    fieldLabel='顔色'
+                    fieldLabel={plang('color')}
                     fieldName="color" 
                     fieldType="color"
                     defaultValue="#872121"
@@ -118,7 +128,7 @@ export default function App() {
 
             <div className="iweby-row">
                 <InputBox
-                    fieldLabel='附件'
+                    fieldLabel={plang('attachment')}
                     fieldName="file"
                     fieldType="file"
                     multiple
@@ -129,21 +139,21 @@ export default function App() {
 
             <div className="iweby-row">
                 <InputBox
-                    fieldLabel='備注'
+                    fieldLabel={plang('remark')}
                     fieldName="remark"
                     fieldType="textarea"
                     value={formData.remark}
                     onChange={handleFieldChange('remark')}
                 />
             </div>
-            
+
             <div className="iweby-row">
                 <button 
                     onClick={handleSubmit}
                     //disabled={!canSubmit}
                     style={{ opacity: canSubmit ? 1 : 0.5 }}
                 >
-                    提交
+                    {plang('btn_submit')}
                 </button>
             </div>
         </>
