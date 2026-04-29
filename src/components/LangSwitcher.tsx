@@ -53,7 +53,7 @@ export default function LangSwitcher({ defaultLang, onLanguageChange }: LangSwit
                 <button
                     key={code}
                     type="button"
-                    className={lang === code ? 'current' : ''}
+                     {...(lang === code && { className: 'current' })}
                     onClick={() => handleSwitch(code)}
                     title={title}
                 >{label}</button>
