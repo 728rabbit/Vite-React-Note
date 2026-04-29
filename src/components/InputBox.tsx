@@ -128,20 +128,6 @@ const getErrorMessage = (rule: string, langPreference?: string): string => {
     return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
 };
 
-const getlangPreference = (): string => {
-    // Read from localStorage first, then from cookies if not found. English is the default language.
-    // 1. How to set language preferences: 
-    //    localStorage.setItem('app_default_language', 'zh');
-    // 2. Trigger re-render:
-    //    window.dispatchEvent(new CustomEvent('inputbox:languageChange'));
-    let langPreference = localStorage.getItem('app_default_language');
-    if (!langPreference) {
-        const cookieMatch = document.cookie.match(/app_default_language=([^;]+)/);
-        langPreference = cookieMatch ? cookieMatch[1] : null;
-    }
-    return (langPreference ?? 'en');
-}
-
 const isValid = (value: string, validation?: string, langPreference?: string): string => {
     if (!validation) return '';
 
@@ -204,7 +190,7 @@ export default function InputBox({
     validation,
     ...props
 }: InputBoxProps) {
-    const [langPreference, setLangPreference] = useState(() => getlangPreference());
+    const [langPreference, setLangPreference] = useState(() => (localStorage.getItem('app_default_language') || 'en'));
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [passwordMode, setPasswordMode] = useState(true);
@@ -296,7 +282,7 @@ export default function InputBox({
     // Listen for global force validation event and language change event
     useEffect(() => {
         const handleForceValidate = () => setForceDisplayError(true);
-        const handleLanguageChange = () => setLangPreference(getlangPreference());
+        const handleLanguageChange = () => setLangPreference(localStorage.getItem('app_default_language') || 'en');
 
         window.addEventListener('inputbox:forceValidate', handleForceValidate);
         window.addEventListener('inputbox:languageChange', handleLanguageChange);

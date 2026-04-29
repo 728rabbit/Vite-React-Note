@@ -1,45 +1,26 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback  } from 'react';
+import { useI18n } from '../I18n';
 import './LangSwitcher.css';
 
 type Language = 'zh' | 'en';
 
-interface LangSwitcherProps {
-    defaultLang?: Language;
-    onLanguageChange?: (lang: Language) => void;
-}
-
-export default function LangSwitcher({ defaultLang, onLanguageChange }: LangSwitcherProps = {}) {
-    const [lang, setLang] = useState<Language>(() => {
-        // Prioritizes using the defaultLang prop, then reads from localStorage, and finally defaults to 'en'.
-        if (defaultLang) return defaultLang;
-        const stored = localStorage.getItem('app_default_language');
-        return (stored === 'zh' || stored === 'en') ? stored : 'en';
-    });
+export default function LangSwitcher() {
+    const { lang, setLang } = useI18n();
 
     // Synchronize localStorage changes and triggered events
     const handleSwitch = useCallback((newLang: Language) => {
-        if (newLang === lang) return; // If the languages ​​are the same, do nothing.
+        // If the languages ​​are the same, do nothing.
+        if (newLang === lang) { return; }
         
+        // 1. How to set language preferences: 
+        //    localStorage.setItem('app_default_language', 'zh');
+        // 2. Trigger re-render:
+        //    window.dispatchEvent(new CustomEvent('inputbox:languageChange'));
         setLang(newLang);
         localStorage.setItem('app_default_language', newLang);
         window.dispatchEvent(new CustomEvent('inputbox:languageChange', { detail: { language: newLang } }));
-        onLanguageChange?.(newLang);
-    }, [lang, onLanguageChange]);
+    }, [lang]);
 
-    // Listen for language changes in other tabs (optional)
-    useEffect(() => {
-        const handleStorageChange = (e: StorageEvent) => {
-            if (e.key === 'app_default_language' && e.newValue) {
-                const newLang = e.newValue as Language;
-                if (newLang === 'zh' || newLang === 'en') {
-                    setLang(newLang);
-                }
-            }
-        };
-        
-        window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
-    }, []);
 
     // Button configuration for easy expansion
     const buttons = [
