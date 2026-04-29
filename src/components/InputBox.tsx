@@ -99,7 +99,7 @@ const VALIDATION_RULES = {
 };
 
 // Error message mapping
-const ERROR_MESSAGES: Record<string, string> = {
+const ERROR_MESSAGES_EN: Record<string, string> = {
     required: 'Please fill out this field correctly.',
     password: 'Password must contain at least 6 characters, including upper/lowercase and numbers (e.g. Abc123).',
     email: 'Invalid email address format.',
@@ -110,8 +110,29 @@ const ERROR_MESSAGES: Record<string, string> = {
     gt0: 'Value must be greater than 0.',
 };
 
+const ERROR_MESSAGES_ZH: Record<string, string> = {
+    required: '請正確填寫此欄位。',
+    password: '密碼必須包含至少 6 個字元，包括大寫字母、小寫字母和數字（例如：Abc123）。',
+    email: '電子郵件地址格式無效。',
+    date: '日期格式無效。',
+    time: '時間格式無效。',
+    number: '數字格式無效。',
+    ge0: '數值必須大於或等於 0。',
+    gt0: '數值必須大於 0。',
+};
+
 const getErrorMessage = (rule: string): string => {
-    return ERROR_MESSAGES[rule] || 'Invalid format.';
+    // Read from localStorage first, then from cookies if not found. English is the default language.
+    // How to set language preferences: 
+    // localStorage.setItem('app_default_language', 'zh');
+    let langPreference = localStorage.getItem('app_default_language');
+    if (!langPreference) {
+        const cookieMatch = document.cookie.match(/app_default_language=([^;]+)/);
+        langPreference = cookieMatch ? cookieMatch[1] : null;
+    }
+    const isEnglish = (langPreference !== 'zh');
+    const messages = isEnglish ? ERROR_MESSAGES_EN : ERROR_MESSAGES_ZH;
+    return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
 };
 
 const isValid = (value: string, validation?: string): string => {
