@@ -84,6 +84,8 @@ interface InputBoxProps {
     disabled?: boolean;
     validation?: string;
     multiple?: boolean;
+    min?: string,
+    max?: string
 }
 
 // Extract validation rules as constants to avoid repeated creation
