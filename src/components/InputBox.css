@@ -236,11 +236,12 @@ div.iweby-input small.tips {
 }
 
 .iweby-input-checkbox input[type="checkbox"]:checked + span:after {
-    content: '✓';
+    content: "✔";
+    color: var(--icolor-primary);
+    font-family: Arial, Helvetica, sans-serif;
     position: absolute;
     left: 3px;
-    top: 9px;
-    color: var(--icolor-primary);
+    top: 11px;
     font-size: 18px;
     font-weight: bold;
 }
