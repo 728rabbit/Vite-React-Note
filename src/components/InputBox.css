@@ -25,7 +25,8 @@ div.iweby-input input[type="color"],
 div.iweby-input input[type="tel"],
 div.iweby-input input[type="email"],
 div.iweby-input input[type="number"],
-div.iweby-input input[type="file"] {
+div.iweby-input input[type="file"],
+div.iweby-input select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -91,7 +92,8 @@ div.iweby-input input[type="tel"].error,
 div.iweby-input input[type="email"].error,
 div.iweby-input input[type="number"].error,
 div.iweby-input input[type="file"].error,
-div.iweby-input textarea.error {
+div.iweby-input textarea.error,
+div.iweby-input select.error {
     border-color: var(--icolor-lightred) !important;
 }
 
@@ -101,4 +103,206 @@ div.iweby-input small.tips {
     display: block;
     color: var(--icolor-red);
     margin-top: 2px;
+}
+
+
+/* ============================================
+   Modern Checkbox & Radio Styles
+   (Works with existing HTML structure)
+   ============================================ */
+
+/* 容器樣式 */
+.iweby-input-checkbox .group,
+.iweby-input-radio .group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+
+/* Label 基礎樣式 */
+.iweby-input-checkbox label,
+.iweby-input-radio label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+    transition: color 0.2s ease;
+    padding: 4px 0;
+}
+
+/* 隱藏原生 input */
+.iweby-input-checkbox input[type="checkbox"],
+.iweby-input-radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hover 效果 */
+.iweby-input-checkbox label:hover::before {
+    border-color: var(--icolor-primary);
+    background-color: #f8f9ff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.iweby-input-radio label:hover::before {
+    border-color: var(--icolor-primary);
+    background-color: #f8f9ff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Checked 狀態 - Checkbox */
+.iweby-input-checkbox input:checked + span::before,
+.iweby-input-checkbox input:checked ~ :first-child::before {
+    background-color: var(--icolor-primary);
+    border-color: var(--icolor-primary);
+    position: relative;
+}
+
+/* 添加勾勾圖標 */
+.iweby-input-checkbox input:checked ~ span::after {
+    content: '✓';
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+/* Checked 狀態 - Radio */
+.iweby-input-radio input:checked ~ span::before {
+    background-color: var(--icolor-primary);
+    border-color: var(--icolor-primary);
+    box-shadow: inset 0 0 0 4px white;
+}
+
+/* 修正文字位置 */
+.iweby-input-checkbox span,
+.iweby-input-radio span {
+    position: relative;
+    display: inline-block;
+    line-height: 20px;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    color: var(--icolor-black);
+}
+
+/* 確保勾勾顯示在正確位置 */
+.iweby-input-checkbox input:checked ~ span {
+    position: relative;
+}
+
+/* 更簡潔的實現（如果上面的不 work） */
+.iweby-input-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.iweby-input-checkbox input[type="checkbox"] + span {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 20px;
+}
+
+.iweby-input-checkbox input[type="checkbox"] + span:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--icolor-gray);
+    border-radius: 4px;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.iweby-input-checkbox input[type="checkbox"]:checked + span:before {
+    border-color: var(--icolor-primary);
+}
+
+.iweby-input-checkbox input[type="checkbox"]:checked + span:after {
+    content: '✓';
+    position: absolute;
+    left: 3px;
+    top: 9px;
+    color: var(--icolor-primary);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.iweby-input-checkbox input[type="checkbox"]:hover + span:before {
+    border-color: var(--icolor-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Radio 樣式 */
+.iweby-input-radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.iweby-input-radio input[type="radio"] + span {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 20px;
+}
+
+.iweby-input-radio input[type="radio"] + span:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--icolor-gray);
+    border-radius: 50%;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.iweby-input-radio input[type="radio"]:checked + span:before {
+    background-color: var(--icolor-primary);;
+    border-color: var(--icolor-primary);
+    box-shadow: inset 0 0 0 3px white;
+}
+
+.iweby-input-radio input[type="radio"]:hover + span:before {
+    border-color: var(--icolor-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Error 狀態 */
+.iweby-input-checkbox input[type="checkbox"].error + span:before,
+.iweby-input-radio input[type="radio"].error + span:before {
+    border-color: var(--icolor-lightred) !important;;
+}
+
+/* Disabled 狀態 */
+.iweby-input-checkbox input[type="checkbox"]:disabled + span,
+.iweby-input-radio input[type="radio"]:disabled + span {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.iweby-input-checkbox input[type="checkbox"]:disabled + span:before,
+.iweby-input-radio input[type="radio"]:disabled + span:before {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
 }

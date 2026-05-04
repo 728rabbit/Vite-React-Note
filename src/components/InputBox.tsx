@@ -69,26 +69,80 @@ return (
 )
 */
 
+/*
+Universal Input Component, supports both controlled and uncontrolled modes
+
+@example - Uncontrolled mode
+    <InputBox fieldName="username" defaultValue="Default value" onChange={(v) => console.log(v)} />
+
+@example - Controlled mode
+    <InputBox fieldName="email" value={email} onChange={setEmail} placeholder="Please enter email" />
+
+@example - Form Validation (see original comments)
+*/
+
+/*
+Universal Input Component, supports both controlled and uncontrolled modes
+
+@example - Uncontrolled mode
+    <InputBox fieldName="username" defaultValue="Default value" onChange={(v) => console.log(v)} />
+
+@example - Controlled mode
+    <InputBox fieldName="email" value={email} onChange={setEmail} placeholder="Please enter email" />
+
+@example - Form Validation (see original comments)
+*/
+
+/*
+Universal Input Component, supports both controlled and uncontrolled modes
+
+@example - Uncontrolled mode
+    <InputBox fieldName="username" defaultValue="Default value" onChange={(v) => console.log(v)} />
+
+@example - Controlled mode
+    <InputBox fieldName="email" value={email} onChange={setEmail} placeholder="Please enter email" />
+
+@example - Form Validation (see original comments)
+*/
+
+/*
+Universal Input Component, supports both controlled and uncontrolled modes
+
+@example - Uncontrolled mode
+    <InputBox fieldName="username" defaultValue="Default value" onChange={(v) => console.log(v)} />
+
+@example - Controlled mode
+    <InputBox fieldName="email" value={email} onChange={setEmail} placeholder="Please enter email" />
+
+@example - Form Validation (see original comments)
+*/
+
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import './InputBox.css';
+
+interface OptionProps {
+    value: string;
+    label: string;
+}
 
 interface InputBoxProps {
     fieldLabel?: string;
     fieldName: string;
-    fieldType?: 'text' | 'password' | 'datetime-local' | 'date' | 'time' | 'color' | 'tel' | 'email' | 'number' | 'textarea' | 'editor' | 'file';
+    fieldType?: ('text' | 'password' | 'datetime-local' | 'date' | 'time' | 'color' | 'tel' | 'email' | 'number' | 'textarea' | 'editor' | 'file' | 'select' | 'checkbox' | 'radio');
     fieldId?: string;
     value?: string;
     defaultValue?: string;
-    onChange?: (value: string, isValid?: boolean) => void;
+    options?: OptionProps[];
+    onChange?: (value: string, isValid?: boolean, files?: FileList) => void; 
     placeholder?: string;
     disabled?: boolean;
     validation?: string;
     multiple?: boolean;
-    min?: string,
-    max?: string
+    min?: string;
+    max?: string;
 }
 
-// Extract validation rules as constants to avoid repeated creation
+// Validation rule functions (return true if INVALID)
 const VALIDATION_RULES = {
     required: (value: string) => value.trim() === '',
     password: (value: string) => !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(value),
@@ -100,7 +154,7 @@ const VALIDATION_RULES = {
     gt0: (value: string) => isNaN(Number(value)) || Number(value) <= 0,
 };
 
-// Error message mapping - English
+// English error messages
 const ERROR_MESSAGES_EN: Record<string, string> = {
     required: 'Please fill out this field correctly.',
     password: 'Password must contain at least 6 characters, including uppercase, lowercase and numbers (e.g. Abc123).',
@@ -110,9 +164,11 @@ const ERROR_MESSAGES_EN: Record<string, string> = {
     number: 'Invalid number format.',
     ge0: 'Value must be greater than or equal to 0.',
     gt0: 'Value must be greater than 0.',
+    regex: 'Invalid format.',
+    regexPattern: 'Invalid regular expression pattern.',
 };
 
-// Error message mapping - Traditional Chinese
+// Traditional Chinese error messages
 const ERROR_MESSAGES_ZH: Record<string, string> = {
     required: '請正確填寫此欄位。',
     password: '密碼必須包含至少 6 個字元，包括大寫字母、小寫字母和數字（例如：Abc123）。',
@@ -122,6 +178,8 @@ const ERROR_MESSAGES_ZH: Record<string, string> = {
     number: '數字格式無效。',
     ge0: '數值必須大於或等於 0。',
     gt0: '數值必須大於 0。',
+    regex: '格式無效。',
+    regexPattern: '正則表達式模式無效。',
 };
 
 const getErrorMessage = (rule: string, langPreference?: string): string => {
@@ -130,40 +188,51 @@ const getErrorMessage = (rule: string, langPreference?: string): string => {
     return messages[rule] || (isEnglish ? 'Invalid format.' : '格式無效。');
 };
 
-const isValid = (value: string, validation?: string, langPreference?: string): string => {
+const isValid = (value: string, validation?: string, langPreference?: string, min?: string, max?: string): string => {
     if (!validation) return '';
 
     const rules = validation.split('|');
     const hasRequired = rules.includes('required');
     
-    // Return directly if there is no required rule and the value is empty
     if (!hasRequired && value.trim() === '') return '';
 
     for (const rule of rules) {
-        // Built-in rules
         if (rule in VALIDATION_RULES) {
             if (VALIDATION_RULES[rule as keyof typeof VALIDATION_RULES](value)) {
-                return getErrorMessage(rule, (langPreference || 'en'));
+                return getErrorMessage(rule, langPreference);
             }
             continue;
         }
         
-        // Custom regex rule
         if (rule.startsWith('regex:')) {
             const pattern = rule.slice(6);
             try {
                 if (!new RegExp(pattern).test(value)) {
-                    return 'Invalid Regular format.';
+                    return getErrorMessage('regex', langPreference);
                 }
             } catch {
-                return 'Invalid regular expression pattern.';
+                return getErrorMessage('regexPattern', langPreference);
             }
         }
     }
+
+    if (min !== undefined && value.trim() !== '') {
+        const num = Number(value);
+        if (!isNaN(num) && num < Number(min)) {
+            return getErrorMessage('ge0', langPreference).replace('0', min);
+        }
+    }
+    if (max !== undefined && value.trim() !== '') {
+        const num = Number(value);
+        if (!isNaN(num) && num > Number(max)) {
+            return getErrorMessage('gt0', langPreference).replace('0', max);
+        }
+    }
+
     return '';
 };
 
-// Extract password toggle button SVG as constants
+// Eye icons for password toggle
 const EyeIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="currentColor"/>
@@ -179,116 +248,171 @@ const EyeOffIcon = () => (
     </svg>
 );
 
-export default function InputBox({
+export function InputBox({
     fieldLabel = '',
     fieldName,
     fieldType = 'text',
     fieldId = fieldName,
     value: externalValue,
     defaultValue = '',
+    options = [],
     onChange,
     disabled = false,
     placeholder = '',
     validation,
+    multiple = false,
+    min,
+    max,
     ...props
 }: InputBoxProps) {
     const [langPreference, setLangPreference] = useState(() => (localStorage.getItem('app_default_language') || 'en'));
-
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [passwordMode, setPasswordMode] = useState(true);
     const [isTouched, setIsTouched] = useState(false);
     const [forceDisplayError, setForceDisplayError] = useState(false);
-    
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const isControlled = externalValue !== undefined;
     const currentValue = isControlled ? externalValue : internalValue;
+    const currentValueRef = useRef(currentValue);
+    useEffect(() => {
+        currentValueRef.current = currentValue;
+    }, [currentValue]);
 
-    // Is this a required field?
+    // Sync defaultValue when it changes (uncontrolled mode)
+    useEffect(() => {
+        if (!isControlled) {
+            setInternalValue(defaultValue);
+        }
+    }, [defaultValue, isControlled]);
+
     const isRequired = useMemo(() => {
         return validation?.split('|').includes('required') || false;
     }, [validation]);
     
-    // Use ref to avoid unnecessary re-renders
     const validationRef = useRef(validation);
     validationRef.current = validation;
+    const minRef = useRef(min);
+    minRef.current = min;
+    const maxRef = useRef(max);
+    maxRef.current = max;
 
-    // Validation function - use ref to ensure latest validation is used
     const validateValue = useCallback((value: string) => {
-        return isValid(value, validationRef.current, langPreference);
+        return isValid(value, validationRef.current, langPreference, minRef.current, maxRef.current);
     }, [langPreference]);
 
-    // Validation result
     const validationResult = useMemo(() => {
         return validateValue(currentValue);
     }, [currentValue, validateValue, langPreference]);
 
-    // Handle change for text inputs
-    const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const newValue = e.target.value;
+    // Generic change handler for text, textarea, checkbox, radio
+    const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const target = e.target as HTMLInputElement;
+        let newValue = target.value;
+
+        // Checkbox group (multiple checkboxes with same name)
+        if (target.type === 'checkbox' && fieldType === 'checkbox' && options && options.length > 0) {
+            const latestValue = currentValueRef.current;
+            const currentValues = (latestValue && typeof latestValue === 'string' && latestValue !== '') ? latestValue.split(',') : [];
+    
+            if (target.checked) {
+                if (!currentValues.includes(target.value)) {
+                    newValue = [...currentValues, target.value].join(',');
+                } else {
+                    newValue = currentValues.join(',');
+                }
+            } else {
+                newValue = currentValues.filter(v => v !== target.value).join(',');
+            }
+        }
+        // Single checkbox (boolean)
+        else if (target.type === 'checkbox' && fieldType === 'checkbox' && (!options || options.length === 0)) {
+            newValue = target.checked ? 'true' : '';
+        }
+        // Radio group
+        else if (target.type === 'radio' && fieldType === 'radio') {
+            newValue = target.checked ? target.value : '';
+        }
+
         const result = validateValue(newValue);
-
-        if (!isControlled) {
-            setInternalValue(newValue);
-        }
-
-        if (!isTouched) {
-            setIsTouched(true);
-        }
-
-        if (forceDisplayError) {
-            setForceDisplayError(false);
-        }
-
+        if (!isControlled) setInternalValue(newValue);
+        if (!isTouched) setIsTouched(true);
+        if (forceDisplayError) setForceDisplayError(false);
         onChange?.(newValue, result === '');
-    }, [isControlled, validateValue, onChange, isTouched, forceDisplayError]);
+    }, [isControlled, validateValue, onChange, isTouched, forceDisplayError, fieldType, options]);
 
-    // Handle color input specifically
-    const handleColorChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    // File input handler – supports single and multiple files
+    const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) {
+            onChange?.('', true, undefined); 
+            if (!isControlled) setInternalValue('');
+            if (!isTouched) setIsTouched(true);
+            if (forceDisplayError) setForceDisplayError(false);
+            return;
+        }
+
+        let fileValue: string;
+        if (multiple && files.length > 1) {
+            const fileNames = Array.from(files).map(f => f.name).join(',');
+            fileValue = `files:${fileNames}`;
+        } else {
+            const file = files[0];
+            fileValue = `file:${file.name}`;
+        }
+
+        const result = validateValue(fileValue);
+        if (!isControlled) setInternalValue(fileValue);
+        if (!isTouched) setIsTouched(true);
+        if (forceDisplayError) setForceDisplayError(false);
+        onChange?.(fileValue, result === '', files);
+    }, [isControlled, validateValue, onChange, isTouched, forceDisplayError, multiple]);
+
+    // Color: native picker change (always produces a valid 7-char hex)
+    const handleColorPickerChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         let newValue = e.target.value;
-
-        // Auto-complete # prefix
-        if (newValue && !newValue.startsWith('#')) {
-            newValue = '#' + newValue;
-        }
-        
-        // Limit length to 7 characters (including #)
-        if (newValue.length > 7) {
-            newValue = newValue.slice(0, 7);
-        }
-        
-        // Only allow # and valid hex characters
-        const isValidColor = /^#?[0-9A-Fa-f]*$/.test(newValue);
-        if (!isValidColor) return;
-
+        if (!newValue.startsWith('#')) newValue = '#' + newValue;
         const result = validateValue(newValue);
-
-        if (!isControlled) {
-            setInternalValue(newValue);
-        }
-
-        if (!isTouched) {
-            setIsTouched(true);
-        }
-
-        if (forceDisplayError) {
-            setForceDisplayError(false);
-        }
-
+        if (!isControlled) setInternalValue(newValue);
+        if (!isTouched) setIsTouched(true);
+        if (forceDisplayError) setForceDisplayError(false);
         onChange?.(newValue, result === '');
     }, [isControlled, validateValue, onChange, isTouched, forceDisplayError]);
 
-    // Toggle password visibility
+    // Color: text input – real‑time sync (allow any input, update immediate)
+    const handleColorTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        let rawValue = e.target.value;
+        if (rawValue && !rawValue.startsWith('#')) {
+            rawValue = '#' + rawValue;
+        }
+        if (rawValue.length > 7) {
+            rawValue = rawValue.slice(0, 7);
+        }
+        const result = validateValue(rawValue);
+        if (!isControlled) setInternalValue(rawValue);
+        if (!isTouched) setIsTouched(true);
+        if (forceDisplayError) setForceDisplayError(false);
+        onChange?.(rawValue, result === '');
+    }, [isControlled, validateValue, onChange, isTouched, forceDisplayError]);
+
+    // For the native color picker, only pass a fully valid 6‑digit hex (or fallback)
+    const safeColorValue = useMemo(() => {
+        if (/^#[0-9A-Fa-f]{6}$/i.test(currentValue)) {
+            return currentValue.toLowerCase();
+        }
+        return '#000000';
+    }, [currentValue]);
+
     const togglePasswordMode = useCallback(() => {
         setPasswordMode(prev => !prev);
     }, []);
 
-    // Listen for global force validation event and language change event
+    // Global events: force validation and language change
     useEffect(() => {
         const handleForceValidate = () => setForceDisplayError(true);
         const handleLanguageChange = () => setLangPreference(localStorage.getItem('app_default_language') || 'en');
-
         window.addEventListener('inputbox:forceValidate', handleForceValidate);
         window.addEventListener('inputbox:languageChange', handleLanguageChange);
-        
         return () => {
             window.removeEventListener('inputbox:forceValidate', handleForceValidate);
             window.removeEventListener('inputbox:languageChange', handleLanguageChange);
@@ -297,7 +421,7 @@ export default function InputBox({
 
     const showError = (isTouched || forceDisplayError) && validationResult;
     
-    // Merge shared props for input/textarea elements
+    // Shared props for most input types (except select, file, color)
     const sharedProps = {
         id: fieldId,
         name: fieldName,
@@ -310,7 +434,6 @@ export default function InputBox({
         ...props,
     };
 
-    // Memoize password toggle button to prevent unnecessary re-renders
     const PasswordToggleButton = useMemo(() => (
         <button
             type="button"
@@ -336,33 +459,99 @@ export default function InputBox({
         </button>
     ), [passwordMode, togglePasswordMode]);
 
+    const selectOptions = useMemo(() => {
+        if (options.length === 0) {
+            return [<option key="__placeholder" value="" disabled>No options available</option>];
+        }
+        return options.map((option: OptionProps) => (
+            <option key={option.value} value={option.value}>
+                {option.label}
+            </option>
+        ));
+    }, [options]);
+
     return (
         <div className={`iweby-input iweby-input-${fieldType}`}>
-            {fieldLabel && (
+            {(fieldLabel && fieldType !== 'checkbox' && fieldType !== 'radio') && (
                 <label className="forinput" htmlFor={fieldId}>
                     {fieldLabel}
                     {isRequired && <span className="star"> *</span>}
                 </label>
             )}
             <div style={{ position: 'relative', display: 'block' }}>
-                {fieldType === 'textarea' || fieldType === 'editor' ? (
+                {fieldType === 'select' ? (
+                    <select {...sharedProps}>{selectOptions}</select>
+                ) : (fieldType === 'checkbox' || fieldType === 'radio') && options && options.length > 0 ? (
+                    <div className="group" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                        {options.map((option: OptionProps) => {
+                            let isChecked = false;
+                            if (fieldType === 'radio') {
+                                isChecked = currentValue === option.value;
+                            } else {
+                                const checkedValues = currentValue ? currentValue.split(',') : [];
+                                isChecked = checkedValues.includes(option.value);
+                            }
+                            return (
+                                <label key={option.value} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type={fieldType}
+                                        name={fieldName}
+                                        value={option.value}
+                                        checked={isChecked}
+                                        onChange={handleChange}
+                                        disabled={disabled}
+                                        className={showError ? 'error' : ''}
+                                    />
+                                    <span>{option.label}</span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                ) : (fieldType === 'textarea' || fieldType === 'editor') ? (
                     <textarea {...sharedProps} />
+                ) : fieldType === 'file' ? (
+                    <input
+                        type="file"
+                        id={fieldId}
+                        name={fieldName}
+                        multiple={multiple}
+                        disabled={disabled}
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        className={showError ? 'error' : ''}
+                        {...props}
+                    />
+                ) : fieldType === 'color' ? (
+                    <>
+                        <input
+                            type="color"
+                            id={fieldId}
+                            name={fieldName}
+                            value={safeColorValue}
+                            onChange={handleColorPickerChange}
+                            disabled={disabled}
+                            className={showError ? 'error' : ''}
+                            {...props}
+                        />
+                        <input
+                            type="text"
+                            className="colorcode"
+                            id={`color_${fieldId}`}
+                            value={currentValue || '#000000'}
+                            onChange={handleColorTextChange}
+                            maxLength={7}
+                            disabled={disabled}
+                            placeholder="#RRGGBB"
+                        />
+                    </>
                 ) : (
                     <>
                         <input
                             {...sharedProps}
                             type={fieldType === 'password' ? (passwordMode ? 'password' : 'text') : fieldType}
+                            min={fieldType === 'number' ? min : undefined}
+                            max={fieldType === 'number' ? max : undefined}
                         />
-                        {fieldType === 'color' && (
-                            <input 
-                                type="text" 
-                                className="colorcode" 
-                                id={`color_${fieldId}`} 
-                                value={!currentValue ? '#000000' : currentValue.toLowerCase()} 
-                                onChange={handleColorChange} 
-                                maxLength={7}
-                            />
-                        )}
                         {fieldType === 'password' && PasswordToggleButton}
                     </>
                 )}
