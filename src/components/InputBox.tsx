@@ -27,6 +27,10 @@ const handleFieldChange = useCallback((fieldName: string) => (value: string, isV
         [fieldName]: value
     }));
 
+    if (fieldName === 'attachment' && files) {
+        setFileList(files);
+    }
+
     setFieldValidity(prev => ({
         ...prev,
         [fieldName]: isValid || false
@@ -43,7 +47,7 @@ const handleSubmit = useCallback(() => {
     } else {
         console.log('Form validation failed, please check your input.');
     }
-}, [canSubmit, formData]);
+}, [canSubmit, formData, fileList]);
 
 return (
     <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
@@ -482,7 +486,7 @@ export function InputBox({
                 {fieldType === 'select' ? (
                     <select {...sharedProps}>{selectOptions}</select>
                 ) : (fieldType === 'checkbox' || fieldType === 'radio') && options && options.length > 0 ? (
-                    <div className="group" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                    <div className="options-group">
                         {options.map((option: OptionProps) => {
                             let isChecked = false;
                             if (fieldType === 'radio') {
@@ -491,11 +495,14 @@ export function InputBox({
                                 const checkedValues = currentValue ? currentValue.split(',') : [];
                                 isChecked = checkedValues.includes(option.value);
                             }
+                            const base64Id = btoa(encodeURIComponent(option.value));
+                            const inputId = `${fieldName}_${base64Id.replace(/[^a-zA-Z0-9]/g, '').substring(0, 20).toLowerCase()}`;
+
                             return (
-                                <label key={option.value} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                <label key={option.value} htmlFor={inputId}>
                                     <input
                                         type={fieldType}
-                                        name={fieldName}
+                                        id={inputId}
                                         value={option.value}
                                         checked={isChecked}
                                         onChange={handleChange}
