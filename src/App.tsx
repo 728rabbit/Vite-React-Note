@@ -155,19 +155,22 @@ export default function App() {
                     validation="required"/>
             </div>
 
-            <InputBox
-                fieldLabel="嗜好"
-                fieldName="hobbies"
-                fieldType="checkbox"
-                options={[
-                    { value: 'reading', label: '閱讀' },
-                    { value: 'music', label: '音樂' },
-                    { value: 'sports', label: '運動' }
-                ]}
-                value={formData.hobbies}
-                onChange={handleFieldChange('hobbies')}
-                validation="required"
-            />
+            <div className="iweby-row">
+                <InputBox
+                    fieldLabel="嗜好"
+                    fieldName="hobbies"
+                    fieldType="checkbox"
+                    options={[
+                        { value: 'reading', label: '閱讀' },
+                        { value: 'music', label: '音樂' },
+                        { value: 'sports', label: '運動' }
+                    ]}
+                    value={formData.hobbies}
+                    onChange={handleFieldChange('hobbies')}
+                    validation="required"
+                />
+            </div>
+            
 
             <div className="iweby-row">
                 <InputBox
@@ -183,16 +186,18 @@ export default function App() {
                     validation="required"/>
             </div>
 
-            <InputBox
-                fieldName="tnc"
-                fieldType="checkbox"
-                value={formData.tnc}
-                onChange={handleFieldChange('tnc')}
-                options={[
-                    { value: 'yes', label: '本人已閲讀並同意相關條款及細則。' },
-                ]}
-                validation="required"
-            />
+            <div className="iweby-row">
+                <InputBox
+                    fieldName="tnc"
+                    fieldType="checkbox"
+                    value={formData.tnc}
+                    onChange={handleFieldChange('tnc')}
+                    options={[
+                        { value: 'yes', label: '本人已閲讀並同意相關條款及細則。' },
+                    ]}
+                    validation="required"
+                />
+            </div>
 
             <div className="iweby-row">
                 <InputBox 
