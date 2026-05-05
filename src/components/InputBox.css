@@ -12,7 +12,7 @@ div.iweby-input label.forinput {
     line-height: 30px;
 }
 
-div.iweby-input label.forinput > span.star {
+div.iweby-input strong.mask-required {
     color: var(--icolor-red);
 }
 

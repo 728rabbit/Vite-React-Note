@@ -476,10 +476,11 @@ export function InputBox({
 
     return (
         <div className={`iweby-input iweby-input-${fieldType}`}>
-            {(fieldLabel && fieldType !== 'checkbox' && fieldType !== 'radio') && (
+            {fieldLabel && (
                 <label className="forinput" htmlFor={fieldId}>
                     {fieldLabel}
-                    {isRequired && <span className="star"> *</span>}
+                    : 
+                    {isRequired && <strong className="mask-required"> *</strong>}
                 </label>
             )}
             <div style={{ position: 'relative', display: 'block' }}>
@@ -499,7 +500,7 @@ export function InputBox({
                             const inputId = `${fieldName}_${base64Id.replace(/[^a-zA-Z0-9]/g, '').substring(0, 20).toLowerCase()}`;
 
                             return (
-                                <label key={option.value} htmlFor={inputId}>
+                                <label htmlFor={inputId} key={inputId} >
                                     <input
                                         type={fieldType}
                                         id={inputId}
@@ -509,7 +510,7 @@ export function InputBox({
                                         disabled={disabled}
                                         className={showError ? 'error' : ''}
                                     />
-                                    <span>{option.label}</span>
+                                    <span>{option.label}{(!fieldLabel && isRequired) && <strong className="mask-required"> *</strong>}</span>
                                 </label>
                             );
                         })}
