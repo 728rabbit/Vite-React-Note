@@ -157,7 +157,7 @@ export default function App() {
 
             <div className="iweby-row">
                 <InputBox
-                    fieldLabel="嗜好"
+                    fieldLabel="興趣"
                     fieldName="hobbies"
                     fieldType="checkbox"
                     options={[
